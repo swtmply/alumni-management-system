@@ -5,6 +5,7 @@ import { signIn, signOut } from ".";
 import { registerFormSchema } from "@/components/register-form";
 import { loginFormSchema } from "@/components/login-form";
 import prisma from "../db";
+import { revalidatePath } from "next/cache";
 
 export async function authenticate(params: z.infer<typeof loginFormSchema>) {
   try {
@@ -19,18 +20,17 @@ export async function authenticate(params: z.infer<typeof loginFormSchema>) {
 
 export async function register(params: z.infer<typeof registerFormSchema>) {
   try {
-    const { email, password } = params;
-
     // const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await prisma.user.create({
-      data: {
-        email,
-        password,
-      },
+      data: params,
     });
 
-    if (user) return { message: "User created successfully" };
+    if (user) {
+      revalidatePath("/dashboard/users");
+
+      return { message: "User created successfully", ok: true };
+    }
   } catch (error) {
     throw error;
   }

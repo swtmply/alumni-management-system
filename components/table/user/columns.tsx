@@ -3,6 +3,7 @@
 import { cn } from "@/app/lib/utils";
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import UpdateUserModal from "./update-user-modal";
 
 export const userColumns: ColumnDef<User>[] = [
   {
@@ -32,10 +33,16 @@ export const userColumns: ColumnDef<User>[] = [
         <div
           className={cn(
             "px-2 py-1 rounded-full text-white max-w-max",
-            verified ? "bg-green-500" : "bg-red-500"
+            verified ? "bg-green-500" : "bg-red-500 hover:bg-red-600"
           )}
         >
-          {verified ? "Verified" : "Not Verified"}
+          {verified ? (
+            "Verified"
+          ) : (
+            <UpdateUserModal userId={row.original.id}>
+              Not Verified
+            </UpdateUserModal>
+          )}
         </div>
       );
     },

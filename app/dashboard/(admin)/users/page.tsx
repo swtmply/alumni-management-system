@@ -3,7 +3,10 @@ import { userColumns } from "@/components/table/user/columns";
 import prisma from "@/app/lib/db";
 
 const UsersPage = async () => {
-  const users = await prisma.user.findMany({ where: { role: "user" } });
+  const users = await prisma.user.findMany({
+    where: { role: "user" },
+    orderBy: { updatedAt: "desc" },
+  });
 
   return (
     <div>
