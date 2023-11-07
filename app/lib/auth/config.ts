@@ -1,7 +1,6 @@
-import type { NextAuthConfig } from "next-auth";
+import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "../db";
-import { type DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -12,10 +11,10 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
-  providers: [],
   pages: {
     signIn: "/login",
   },
+  providers: [],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
@@ -33,9 +32,8 @@ export const authConfig = {
       return session;
     },
   },
+  adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
   },
-  adapter: PrismaAdapter(prisma),
 } satisfies NextAuthConfig;

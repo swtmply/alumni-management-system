@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { authConfig } from "./config";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { z } from "zod";
 import prisma from "../db";
 
@@ -19,11 +20,19 @@ export const { auth, signIn, signOut } = NextAuth({
 
           if (!user) return null;
 
-          if (password === user.password) return user;
+          // const passwordMatch = await bcrypt.compare(password, user.password!);
+          const passwordMatch = password === user.password;
+
+          if (passwordMatch) return user;
         }
 
+        console.log("Invalid Credentials");
         return null;
       },
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 });

@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { authenticate } from "@/server/auth/actions";
+import { authenticate } from "@/app/lib/auth/actions";
 
 export const loginFormSchema = z.object({
   email: z

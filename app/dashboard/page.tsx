@@ -1,5 +1,5 @@
 import SignOutButton from "@/components/sign-out-button";
-import { auth } from "@/server/auth";
+import { auth } from "../lib/auth";
 
 const Dashboard = async () => {
   const session = await auth();
