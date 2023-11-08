@@ -1,9 +1,10 @@
 "use client";
 
-import { Jobs } from "@prisma/client";
+import { Job } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import JobsRowActions from "./jobs-row-actions";
 
-export const jobsColumns: ColumnDef<Jobs>[] = [
+export const jobsColumns: ColumnDef<Job>[] = [
   {
     accessorKey: "companyName",
     header: "Company Name",
@@ -32,5 +33,6 @@ export const jobsColumns: ColumnDef<Jobs>[] = [
   {
     id: "actions",
     header: "Actions",
+    cell: ({ row }) => <JobsRowActions job={row.original} />,
   },
 ];

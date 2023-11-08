@@ -25,9 +25,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { Dispatch, SetStateAction, useState } from "react";
 import { TagInput } from "@/components/ui/tag-input";
 import { Textarea } from "@/components/ui/textarea";
-import { createJob } from "@/app/lib/jobs/actions";
+import { updateJob } from "@/app/lib/jobs/actions";
+import { Job } from "@prisma/client";
 
-export const addJobFormSchema = z.object({
+export const editJobFormSchema = z.object({
   companyName: z.string().min(1, { message: "Company name is required" }),
   description: z.string().min(1, { message: "Description is required" }),
   link: z.string().url({ message: "Job link must be a valid link" }),
@@ -46,49 +47,40 @@ export const addJobFormSchema = z.object({
     .min(1, { message: "Contact must have at least 1 detail" }),
 });
 
-const AddJobModal = () => {
+const EditJobModal = ({ job }: { job: Job }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Add Job</Button>
+        <Button variant={"outline"}>Edit</Button>
       </DialogTrigger>
       <DialogContent className="max-w-max">
         <DialogHeader>
-          <DialogTitle>Add Job</DialogTitle>
+          <DialogTitle>Edit Job</DialogTitle>
         </DialogHeader>
-        <AddJobForm setIsOpen={setIsOpen} />
+        <EditJobForm setIsOpen={setIsOpen} job={job} />
       </DialogContent>
     </Dialog>
   );
 };
 
-function AddJobForm({
+function EditJobForm({
   setIsOpen,
+  job,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  job: Job;
 }) {
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof addJobFormSchema>>({
-    resolver: zodResolver(addJobFormSchema),
-    defaultValues: {
-      companyName: "",
-      description: "",
-      courses: [],
-      skills: [],
-      experience: 0,
-      link: "",
-      role: "",
-      contactDetails: [],
-      location: "",
-      salary: 0,
-    },
+  const form = useForm<z.infer<typeof editJobFormSchema>>({
+    resolver: zodResolver(editJobFormSchema),
+    defaultValues: job,
   });
 
-  const onSubmit = async (values: z.infer<typeof addJobFormSchema>) => {
-    const response = await createJob(values);
+  const onSubmit = async (values: z.infer<typeof editJobFormSchema>) => {
+    const response = await updateJob(job.id, values);
     if (response?.ok) {
       form.reset();
       setIsOpen(false);
@@ -283,4 +275,4 @@ function AddJobForm({
   );
 }
 
-export default AddJobModal;
+export default EditJobModal;
