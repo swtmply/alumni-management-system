@@ -1,6 +1,6 @@
 import { UserDataTable } from "@/components/table/user/user-data-table";
-import { userColumns } from "@/components/table/user/columns";
 import prisma from "@/app/lib/db";
+import { userColumns } from "@/components/table/user/users-table-columns";
 
 const UsersPage = async () => {
   const users = await prisma.user.findMany({
@@ -10,6 +10,7 @@ const UsersPage = async () => {
 
   return (
     <div>
+      <h2 className="text-2xl font-bold tracking-tight">Users table</h2>
       <UserDataTable columns={userColumns} data={users} />
     </div>
   );

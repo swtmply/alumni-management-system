@@ -62,3 +62,19 @@ model VerificationRequest {
 
   @@unique([identifier, token])
 }
+
+model Jobs {
+  id             String   @id @default(cuid())
+  companyName    String
+  link           String
+  description    String
+  role           String
+  skills         String[]
+  courses        String[]
+  experience     Int
+  location       String
+  salary         Int
+  contactDetails String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

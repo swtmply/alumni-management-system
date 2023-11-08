@@ -10,7 +10,7 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 
-export function UserDataTableToolbar<TData>({
+export function JobsDataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -19,15 +19,17 @@ export function UserDataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter company name..."
+          value={
+            (table.getColumn("companyName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("companyName")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
 
-        {table.getColumn("emailVerified") && (
+        {/* {table.getColumn("emailVerified") && (
           <DataTableFacetedFilter
             column={table.getColumn("emailVerified")}
             title="Status"
@@ -36,7 +38,7 @@ export function UserDataTableToolbar<TData>({
               { value: "not-verified", label: "Not Verified" },
             ]}
           />
-        )}
+        )} */}
         {isFiltered && (
           <Button
             variant="ghost"
