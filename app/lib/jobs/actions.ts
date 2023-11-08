@@ -36,3 +36,17 @@ export const updateJob = async (
     throw e;
   }
 };
+
+export const deleteJob = async (id: string) => {
+  try {
+    const job = await prisma.job.delete({ where: { id } });
+
+    if (!job) return { message: "Something went wrong", ok: false };
+
+    revalidatePath("/dashboard/jobs");
+    return { message: "Job Deleted Successfully", ok: true };
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+};
