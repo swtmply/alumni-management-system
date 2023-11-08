@@ -77,7 +77,9 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={form.formState.isSubmitting} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
