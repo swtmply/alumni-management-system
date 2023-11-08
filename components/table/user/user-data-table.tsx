@@ -22,13 +22,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import AddUserModal from "./add-user-modal";
+import { UserDataTableToolbar } from "./user-data-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function UserDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -49,14 +50,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex justify-between items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <UserDataTableToolbar table={table} />
         <AddUserModal />
       </div>
       <div className="rounded-md border">

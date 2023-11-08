@@ -46,5 +46,11 @@ export const userColumns: ColumnDef<User>[] = [
         </div>
       );
     },
+    filterFn: (row, id, value) => {
+      const rowVerified =
+        row.getValue(id) === null ? "not-verified" : "verified";
+
+      return value.includes(rowVerified);
+    },
   },
 ];

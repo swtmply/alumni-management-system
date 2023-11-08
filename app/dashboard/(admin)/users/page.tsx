@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/table/user/data-table";
+import { UserDataTable } from "@/components/table/user/user-data-table";
 import { userColumns } from "@/components/table/user/columns";
 import prisma from "@/app/lib/db";
 
@@ -10,7 +10,7 @@ const UsersPage = async () => {
 
   return (
     <div>
-      <DataTable columns={userColumns} data={users} />
+      <UserDataTable columns={userColumns} data={users} />
     </div>
   );
 };
