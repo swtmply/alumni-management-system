@@ -13,6 +13,11 @@ export const jobsColumns: ColumnDef<Job>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => {
+      const description = row.getValue("description") as string;
+
+      return <div className="line-clamp-1 max-w-xs">{description}</div>;
+    },
   },
   {
     accessorKey: "role",
