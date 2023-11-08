@@ -1,11 +1,11 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "../db";
-
 declare module "next-auth" {
   interface Session {
     user?: {
       id: string;
+      role: string;
     } & DefaultSession["user"];
   }
 }
@@ -23,13 +23,25 @@ export const authConfig = {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
+        if (auth.user?.role === "user")
+          return Response.redirect(new URL("/dashboard/user", nextUrl));
+
         return Response.redirect(new URL("/dashboard", nextUrl));
       }
       return true;
     },
     session({ session, token }) {
       session.user!.id = token.sub!;
+      // @ts-ignore
+      session.user!.role = token.role;
       return session;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        // @ts-ignore
+        token.role = user.role;
+      }
+      return token;
     },
   },
   adapter: PrismaAdapter(prisma),

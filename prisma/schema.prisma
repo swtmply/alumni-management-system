@@ -45,6 +45,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  role          String    @default("user")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
@@ -60,4 +61,20 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
+}
+
+model Job {
+  id             String   @id @default(cuid())
+  companyName    String
+  link           String
+  description    String
+  role           String
+  skills         String[]
+  courses        String[]
+  experience     Int
+  location       String
+  salary         Int
+  contactDetails String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
