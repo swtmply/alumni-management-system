@@ -37,10 +37,14 @@ const Navigation = ({ role }: NavigationProps) => {
           </>
         ) : (
           <>
-            <NavigationItem href="">Home</NavigationItem>
-            <NavigationItem href="">Documents</NavigationItem>
-            <NavigationItem href="">Profile</NavigationItem>
-            <NavigationItem href="">Jobs</NavigationItem>
+            <NavigationItem href="/dashboard/user">Home</NavigationItem>
+            <NavigationItem href="/dashboard/user/documents">
+              Documents
+            </NavigationItem>
+            <NavigationItem href="/dashboard/user/profile">
+              Profile
+            </NavigationItem>
+            <NavigationItem href="/dashboard/user/jobs">Jobs</NavigationItem>
           </>
         )}
       </ul>

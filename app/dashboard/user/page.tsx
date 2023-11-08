@@ -1,5 +1,7 @@
-const UserDashboard = () => {
-  return <div>User dashboard</div>;
-};
+import React from "react";
 
-export default UserDashboard;
+function UserHomePage() {
+  return <div>UserHomePage</div>;
+}
+
+export default UserHomePage;
