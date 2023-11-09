@@ -26,23 +26,21 @@ const UserDashboard = async () => {
     );
 
   return (
-    <div>
-      <div className="w-full flex flex-col justify-center items-center">
-        <div className="max-w-3xl w-full flex flex-col gap-4">
-          <h2 className="text-2xl font-bold tracking-tight w-full">
-            User Information
-          </h2>
-          <UserInformationTabs />
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="max-w-3xl w-full flex flex-col gap-4">
+        <h2 className="text-2xl font-bold tracking-tight w-full">
+          User Information
+        </h2>
+        <UserInformationTabs />
 
-          <ProfileInfoCard defaultValues={profile} />
-          <ContactInfoCard
-            defaultValues={{
-              id: profile.id,
-              phoneNumber: profile.phoneNumber,
-              email: session?.user?.email!,
-            }}
-          />
-        </div>
+        <ProfileInfoCard defaultValues={profile} />
+        <ContactInfoCard
+          defaultValues={{
+            id: profile.id,
+            phoneNumber: profile.phoneNumber,
+            email: session?.user?.email!,
+          }}
+        />
       </div>
     </div>
   );

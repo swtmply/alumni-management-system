@@ -19,15 +19,19 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      const isAdmin = auth?.user?.role === "admin";
+
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
-        if (auth.user?.role === "user")
+        if (!isAdmin) {
           return Response.redirect(new URL("/dashboard/user", nextUrl));
+        }
 
         return Response.redirect(new URL("/dashboard", nextUrl));
       }
+
       return true;
     },
     session({ session, token }) {
