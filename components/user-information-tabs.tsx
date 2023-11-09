@@ -12,9 +12,8 @@ const UserInformationTabs = () => {
       <Link
         href="/dashboard/user/profile"
         className={cn(
-          "px-4 py-2 border border-slate-500 rounded-md",
-          pathname === "/dashboard/user/profile" &&
-            "text-white bg-red-500 border-none"
+          "px-4 py-2 rounded-md",
+          pathname === "/dashboard/user/profile" && "text-white bg-red-500"
         )}
       >
         Profile
@@ -22,9 +21,8 @@ const UserInformationTabs = () => {
       <Link
         href="/dashboard/user/career"
         className={cn(
-          "px-4 py-2 border border-slate-500 rounded-md",
-          pathname === "/dashboard/user/career" &&
-            "text-white bg-red-500 border-none"
+          "px-4 py-2 rounded-md",
+          pathname === "/dashboard/user/career" && "text-white bg-red-500"
         )}
       >
         Career
@@ -32,9 +30,8 @@ const UserInformationTabs = () => {
       <Link
         href="/dashboard/user/skills"
         className={cn(
-          "px-4 py-2 border border-slate-500 rounded-md",
-          pathname === "/dashboard/user/skills" &&
-            "text-white bg-red-500 border-none"
+          "px-4 py-2 rounded-md",
+          pathname === "/dashboard/user/skills" && "text-white bg-red-500"
         )}
       >
         Skills
