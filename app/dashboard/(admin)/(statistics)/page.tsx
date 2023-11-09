@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 
 import { FolderSearch, User2, UserCheck2, UserMinus2 } from "lucide-react";
-import { auth } from "../lib/auth";
+import { auth } from "../../../lib/auth";
 import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
