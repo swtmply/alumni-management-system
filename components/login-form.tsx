@@ -71,7 +71,9 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={form.formState.isSubmitting} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
