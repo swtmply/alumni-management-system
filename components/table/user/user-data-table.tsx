@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import AddUserModal from "./add-user-modal";
 import { UserDataTableToolbar } from "./user-data-toolbar";

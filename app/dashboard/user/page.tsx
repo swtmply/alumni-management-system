@@ -22,7 +22,7 @@ async function UserHomePage() {
     <div className="w-full flex flex-col justify-center items-center">
       <div className="max-w-6xl w-full flex flex-col gap-4">
         <h2 className="text-2xl font-bold tracking-tight w-full">Jobs</h2>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-4">
           {jobs.map((job) => (
             <Card key={job.id}>
               <CardHeader>

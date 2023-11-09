@@ -44,7 +44,6 @@ const Navigation = ({ role }: NavigationProps) => {
             <NavigationItem href="/dashboard/user/profile">
               Profile
             </NavigationItem>
-            <NavigationItem href="/dashboard/user/jobs">Jobs</NavigationItem>
           </>
         )}
       </ul>
