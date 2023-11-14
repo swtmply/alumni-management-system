@@ -24,8 +24,9 @@ import { Input } from "@/components/ui/input";
 import DatePicker from "./ui/date-picker";
 import { updateProfile } from "@/app/lib/user/actions";
 import { useToast } from "./ui/use-toast";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const updatePersonalInfoSchema = z.object({
   studentNumber: z
@@ -62,25 +63,31 @@ const ProfileInfoCard = ({ defaultValues }: ProfileFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [disabled, setDisabled] = useState(true);
+  const [isPending, startTransition] = useTransition();
+  const { update, data: session } = useSession();
 
   const form = useForm<z.infer<typeof updatePersonalInfoSchema>>({
     resolver: zodResolver(updatePersonalInfoSchema),
     defaultValues,
   });
 
-  const onSubmit = async (values: z.infer<typeof updatePersonalInfoSchema>) => {
-    const response = await updateProfile(defaultValues.id, values);
+  const onSubmit = (values: z.infer<typeof updatePersonalInfoSchema>) => {
+    startTransition(async () => {
+      const response = await updateProfile(defaultValues.id, values);
 
-    toast({
-      title: response?.message,
+      toast({
+        title: response?.message,
+      });
+
+      await update({ name: `${values.firstName} ${values.lastName}` });
+      router.refresh();
     });
-    router.refresh();
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Personal Information</CardTitle>
+        <CardTitle>Personal Information - {session?.user?.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>

@@ -40,7 +40,14 @@ export const authConfig = {
       session.user!.role = token.role;
       return session;
     },
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
+      if (trigger === "update") {
+        token = {
+          ...token,
+          ...session,
+        };
+      }
+
       if (user) {
         // @ts-ignore
         token.role = user.role;

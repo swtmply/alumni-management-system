@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import SignOutButton from "./sign-out-button";
+import { Skeleton } from "./ui/skeleton";
 
 interface NavigationProps {
   role: string | undefined;
@@ -66,6 +67,37 @@ const NavigationItem = ({ href, children }: NavigationItemProps) => {
     >
       {children}
     </Link>
+  );
+};
+
+export const NavigationSkeleton = () => {
+  return (
+    <div className="mt-12 flex flex-col justify-between h-full">
+      <ul className="flex flex-col gap-4">
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+      </ul>
+      <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+        <Skeleton className="w-6 h-6" />
+        <Skeleton className="w-40 h-6" />
+      </div>
+    </div>
   );
 };
 

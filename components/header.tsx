@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Skeleton } from "./ui/skeleton";
 
 const Header = ({
   session,
@@ -25,6 +26,18 @@ const Header = ({
           fill
         />
       </div>
+    </div>
+  );
+};
+
+export const HeaderSkeleton = () => {
+  return (
+    <div className="flex items-center gap-2 w-full justify-end mb-8">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="w-24 h-4" />
+        <Skeleton className="w-24 h-2" />
+      </div>
+      <Skeleton className="w-12 h-12 rounded-full" />
     </div>
   );
 };
