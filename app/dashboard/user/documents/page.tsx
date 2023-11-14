@@ -37,7 +37,7 @@ const DocumentsPage = async () => {
                       "PP",
                       { timeZone: "Asia/Singapore" }
                     )}
-                    <span> - {schedule.approved}</span>
+                    <span> - {schedule.status}</span>
                   </p>
                   {schedule.documents.map((document) => (
                     <p

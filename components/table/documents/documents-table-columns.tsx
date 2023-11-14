@@ -13,24 +13,29 @@ export const documentsColumns: ColumnDef<Schedule>[] = [
   {
     accessorKey: "date",
     header: "Date for Document(s) Release",
+    cell: ({ row }) => {
+      const date = row.getValue("date");
+
+      return;
+    },
   },
   {
-    accessorKey: "approved",
+    accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const approved = row.getValue("approved") as string;
+      const status = row.getValue("status") as string;
 
       return (
         <div
           className={cn(
             "px-2 py-1 rounded-full text-white max-w-max",
-            approved === "Pending" && "bg-amber-500 hover:bg-amber-600",
-            approved === "Approved" && "bg-green-500 hover:bg-green-600",
-            approved === "Rejected" && "bg-red-500 hover:bg-red-600"
+            status === "Pending" && "bg-amber-500 hover:bg-amber-600",
+            status === "Approved" && "bg-green-500 hover:bg-green-600",
+            status === "Rejected" && "bg-red-500 hover:bg-red-600"
           )}
         >
           <UpdateDocumentApprovalModal documentId={row.original.id}>
-            {approved}
+            {status}
           </UpdateDocumentApprovalModal>
         </div>
       );

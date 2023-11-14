@@ -15,7 +15,7 @@ export async function createSchedule(
       data: {
         ...params,
         userId: session?.user?.id,
-        approved: "Pending",
+        status: "Pending",
       },
     });
 
@@ -36,7 +36,7 @@ export async function updateSchedule(documentId: string, status: string) {
         id: documentId,
       },
       data: {
-        approved: status,
+        status,
       },
     });
 
