@@ -4,6 +4,7 @@ import { cn } from "@/app/lib/utils";
 import { Schedule } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import UpdateDocumentApprovalModal from "./update-schedule-modal";
+import { zonedTimeToUtc, format } from "date-fns-tz";
 
 export const documentsColumns: ColumnDef<Schedule>[] = [
   {
@@ -14,9 +15,11 @@ export const documentsColumns: ColumnDef<Schedule>[] = [
     accessorKey: "date",
     header: "Date for Document(s) Release",
     cell: ({ row }) => {
-      const date = row.getValue("date");
+      const date = row.getValue("date") as Date;
 
-      return;
+      return format(zonedTimeToUtc(date, "Asia/Singapore"), "PP", {
+        timeZone: "Asia/Singapore",
+      });
     },
   },
   {
