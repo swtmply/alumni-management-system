@@ -15,13 +15,35 @@ export async function createSchedule(
       data: {
         ...params,
         userId: session?.user?.id,
+        approved: "Pending",
+      },
+    });
+
+    if (!schedule) return { message: "Something went wrong", ok: false };
+
+    revalidatePath("/dashboard/user/documents");
+    return { message: "Schedule created successfully", ok: true };
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function updateSchedule(documentId: string, status: string) {
+  try {
+    const schedule = await prisma.schedule.update({
+      where: {
+        id: documentId,
+      },
+      data: {
+        approved: status,
       },
     });
 
     if (!schedule) return { message: "Something went wrong", ok: false };
 
     revalidatePath("/dashboard/documents");
-    return { message: "Schedule created successfully", ok: true };
+    return { message: "Schedule updated successfully", ok: true };
   } catch (e) {
     console.log(e);
     throw e;

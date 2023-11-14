@@ -1,7 +1,14 @@
 "use client";
 
 import { cn } from "@/app/lib/utils";
-import { FolderSearch, LayoutDashboard, Users2 } from "lucide-react";
+import {
+  File,
+  FolderSearch,
+  Home,
+  LayoutDashboard,
+  User2,
+  Users2,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -35,14 +42,23 @@ const Navigation = ({ role }: NavigationProps) => {
               <FolderSearch />
               Jobs
             </NavigationItem>
+            <NavigationItem href="/dashboard/documents">
+              <File />
+              Documents
+            </NavigationItem>
           </>
         ) : (
           <>
-            <NavigationItem href="/dashboard/user">Home</NavigationItem>
+            <NavigationItem href="/dashboard/user">
+              <Home />
+              Home
+            </NavigationItem>
             <NavigationItem href="/dashboard/user/documents">
+              <File />
               Documents
             </NavigationItem>
             <NavigationItem href="/dashboard/user/profile">
+              <User2 />
               Profile
             </NavigationItem>
           </>

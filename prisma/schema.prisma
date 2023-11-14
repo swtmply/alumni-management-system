@@ -119,6 +119,10 @@ model Schedule {
   id        String   @id @default(cuid())
   date      DateTime
   documents String[]
+  approved  String
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?  @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

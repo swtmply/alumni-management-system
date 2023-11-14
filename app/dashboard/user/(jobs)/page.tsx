@@ -10,13 +10,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import ViewJobModal from "@/components/job-info-modal";
+import { auth } from "@/app/lib/auth";
+import { redirect } from "next/navigation";
 
 async function UserHomePage() {
   const jobs = await prisma.job.findMany({
     orderBy: { updatedAt: "desc" },
   });
+
+  const session = await auth();
+
+  const profile = await prisma.profile.findUnique({
+    where: { userId: session?.user?.id },
+  });
+
+  if (!profile) {
+    redirect("/dashboard/user/profile");
+  }
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
