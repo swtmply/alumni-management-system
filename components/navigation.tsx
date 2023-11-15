@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import SignOutButton from "./sign-out-button";
 import { Skeleton } from "./ui/skeleton";
+import { useSession } from "next-auth/react";
 
 interface NavigationProps {
   role: string | undefined;
@@ -25,6 +26,8 @@ interface NavigationItemProps {
 }
 
 const Navigation = ({ role }: NavigationProps) => {
+  const { data: session } = useSession();
+
   return (
     <nav className="mt-12 flex flex-col justify-between h-full">
       <ul className="flex flex-col gap-4">
@@ -57,7 +60,9 @@ const Navigation = ({ role }: NavigationProps) => {
               <File />
               Documents
             </NavigationItem>
-            <NavigationItem href="/dashboard/user/profile">
+            <NavigationItem
+              href={`/dashboard/user/${session?.user?.id}/profile`}
+            >
               <User2 />
               Profile
             </NavigationItem>

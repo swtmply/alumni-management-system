@@ -6,12 +6,18 @@ import ProfileInfoCard from "@/components/profile-info-card";
 
 import UserInformationTabs from "@/components/user-information-tabs";
 
-const UserDashboard = async () => {
+const UserProfile = async ({ params }: { params: { userId: string } }) => {
   const session = await auth();
 
   const profile = await prisma.profile.findUnique({
-    where: { userId: session?.user?.id },
+    where: { userId: params.userId },
   });
+
+  const user = await prisma.user.findUnique({
+    where: { id: profile?.userId! },
+  });
+
+  const editable = session?.user?.id === user?.id;
 
   if (!profile)
     return (
@@ -33,17 +39,22 @@ const UserDashboard = async () => {
         </h2>
         <UserInformationTabs />
 
-        <ProfileInfoCard defaultValues={profile} />
+        <ProfileInfoCard
+          defaultValues={profile}
+          image={user?.image || ""}
+          editable={editable}
+        />
         <ContactInfoCard
           defaultValues={{
             id: profile.id,
             phoneNumber: profile.phoneNumber,
-            email: session?.user?.email!,
+            email: user?.email || "",
           }}
+          editable={editable}
         />
       </div>
     </div>
   );
 };
 
-export default UserDashboard;
+export default UserProfile;

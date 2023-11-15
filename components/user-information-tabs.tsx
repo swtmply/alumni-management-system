@@ -2,36 +2,37 @@
 
 import { cn } from "@/app/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const UserInformationTabs = () => {
   const pathname = usePathname();
+  const { userId } = useParams();
 
   return (
     <div className="flex items-center gap-2">
       <Link
-        href="/dashboard/user/profile"
+        href={`/dashboard/user/${userId}/profile`}
         className={cn(
           "px-4 py-2 rounded-md",
-          pathname === "/dashboard/user/profile" && "text-white bg-red-500"
+          pathname.includes("profile") && "text-white bg-red-500"
         )}
       >
         Profile
       </Link>
       <Link
-        href="/dashboard/user/career"
+        href={`/dashboard/user/${userId}/career`}
         className={cn(
           "px-4 py-2 rounded-md",
-          pathname === "/dashboard/user/career" && "text-white bg-red-500"
+          pathname.includes("career") && "text-white bg-red-500"
         )}
       >
         Career
       </Link>
       <Link
-        href="/dashboard/user/skills"
+        href={`/dashboard/user/${userId}/skills`}
         className={cn(
           "px-4 py-2 rounded-md",
-          pathname === "/dashboard/user/skills" && "text-white bg-red-500"
+          pathname.includes("skills") && "text-white bg-red-500"
         )}
       >
         Skills

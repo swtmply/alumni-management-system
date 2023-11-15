@@ -8,6 +8,7 @@ const Header = ({
     | {
         name: string | null | undefined;
         role: string | null | undefined;
+        image: string | null | undefined;
       }
     | undefined;
 }) => {
@@ -20,7 +21,7 @@ const Header = ({
 
       <div className="rounded-full bg-slate-400 aspect-square h-12 relative">
         <Image
-          src={"https://github.com/swtmply.png"}
+          src={session?.image || "https://github.com/swtmply.png"}
           className="rounded-full"
           alt="Avatar"
           fill

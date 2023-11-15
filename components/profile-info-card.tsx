@@ -24,9 +24,11 @@ import { Input } from "@/components/ui/input";
 import DatePicker from "./ui/date-picker";
 import { updateProfile } from "@/app/lib/user/actions";
 import { useToast } from "./ui/use-toast";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { PutBlobResult } from "@vercel/blob";
 
 export const updatePersonalInfoSchema = z.object({
   studentNumber: z
@@ -45,6 +47,7 @@ export const updatePersonalInfoSchema = z.object({
   yearOfGraduate: z
     .string()
     .min(1, { message: "Year of Graduation is required" }),
+  image: z.string().optional(),
 });
 
 interface ProfileFormProps {
@@ -57,29 +60,60 @@ interface ProfileFormProps {
     yearOfGraduate: string;
     dateOfBirth: Date;
   };
+  editable?: boolean;
+  image?: string;
 }
 
-const ProfileInfoCard = ({ defaultValues }: ProfileFormProps) => {
+const ProfileInfoCard = ({
+  defaultValues,
+  editable = true,
+  image,
+}: ProfileFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [disabled, setDisabled] = useState(true);
   const [isPending, startTransition] = useTransition();
-  const { update, data: session } = useSession();
+  const { update } = useSession();
+
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  const [preview, setPreview] = useState<File>();
 
   const form = useForm<z.infer<typeof updatePersonalInfoSchema>>({
     resolver: zodResolver(updatePersonalInfoSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      image,
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof updatePersonalInfoSchema>) => {
-    startTransition(async () => {
-      const response = await updateProfile(defaultValues.id, values);
+  const onSubmit = async (values: z.infer<typeof updatePersonalInfoSchema>) => {
+    const file = inputFileRef.current?.files?.[0];
 
+    const fileResponse = await fetch(
+      `/api/avatar/upload?filename=${file?.name}`,
+      {
+        method: "POST",
+        body: file,
+      }
+    );
+
+    const newBlob = (await fileResponse.json()) as PutBlobResult;
+
+    setBlob(newBlob);
+
+    startTransition(async () => {
+      const response = await updateProfile(defaultValues.id, {
+        ...values,
+        image: newBlob.url,
+      });
       toast({
         title: response?.message,
       });
-
-      await update({ name: `${values.firstName} ${values.lastName}` });
+      await update({
+        name: `${values.firstName} ${values.lastName}`,
+        image: blob?.url,
+      });
       router.refresh();
     });
   };
@@ -87,7 +121,7 @@ const ProfileInfoCard = ({ defaultValues }: ProfileFormProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Personal Information - {session?.user?.name}</CardTitle>
+        <CardTitle>Personal Information</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -96,6 +130,48 @@ const ProfileInfoCard = ({ defaultValues }: ProfileFormProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-5 mt-4 w-full"
           >
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormLabel className="w-1/2">Image</FormLabel>
+                  <FormControl>
+                    <div
+                      className="w-32 h-32 rounded-full bg-slate-500 relative"
+                      onClick={() => inputFileRef.current?.click()}
+                    >
+                      <Image
+                        src={
+                          (preview && URL.createObjectURL(preview)) ||
+                          image ||
+                          blob?.url ||
+                          ""
+                        }
+                        alt="User Image"
+                        fill
+                        className="rounded-full"
+                      />
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        placeholder="Enter first name"
+                        onChange={(e) => {
+                          field.onChange(e);
+
+                          const file = e.target.files?.[0];
+                          setPreview(file);
+                        }}
+                        ref={inputFileRef}
+                        disabled={disabled}
+                        className="hidden"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="firstName"
@@ -197,21 +273,31 @@ const ProfileInfoCard = ({ defaultValues }: ProfileFormProps) => {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        {!disabled && (
-          <Button variant={"outline"} onClick={() => setDisabled(true)}>
-            Cancel
+      {editable && (
+        <CardFooter className="flex gap-2">
+          {!disabled && (
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                form.reset();
+                setPreview(undefined);
+                setDisabled(true);
+              }}
+            >
+              Cancel
+            </Button>
+          )}
+          <Button
+            onClick={() => setDisabled((prev) => !prev)}
+            variant={!disabled ? "default" : "outline"}
+            form="personal-info-form"
+            type={!disabled ? "button" : "submit"}
+            disabled={isPending}
+          >
+            {!disabled ? "Save Changes" : "Edit Personal Information"}
           </Button>
-        )}
-        <Button
-          onClick={() => setDisabled((prev) => !prev)}
-          variant={!disabled ? "default" : "outline"}
-          form="personal-info-form"
-          type={!disabled ? "button" : "submit"}
-        >
-          {!disabled ? "Save Changes" : "Edit Personal Information"}
-        </Button>
-      </CardFooter>
+        </CardFooter>
+      )}
     </Card>
   );
 };

@@ -41,9 +41,10 @@ interface ContactInfoProps {
     phoneNumber: string;
     email: string;
   };
+  editable?: boolean;
 }
 
-const ContactInfoCard = ({ defaultValues }: ContactInfoProps) => {
+const ContactInfoCard = ({ defaultValues, editable }: ContactInfoProps) => {
   const { toast } = useToast();
   const router = useRouter();
   const [disabled, setDisabled] = useState(true);
@@ -107,21 +108,23 @@ const ContactInfoCard = ({ defaultValues }: ContactInfoProps) => {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        {!disabled && (
-          <Button variant={"outline"} onClick={() => setDisabled(true)}>
-            Cancel
+      {editable && (
+        <CardFooter className="flex gap-2">
+          {!disabled && (
+            <Button variant={"outline"} onClick={() => setDisabled(true)}>
+              Cancel
+            </Button>
+          )}
+          <Button
+            onClick={() => setDisabled((prev) => !prev)}
+            variant={!disabled ? "default" : "outline"}
+            form="personal-info-form"
+            type={!disabled ? "button" : "submit"}
+          >
+            {!disabled ? "Save Changes" : "Edit Personal Information"}
           </Button>
-        )}
-        <Button
-          onClick={() => setDisabled((prev) => !prev)}
-          variant={!disabled ? "default" : "outline"}
-          form="personal-info-form"
-          type={!disabled ? "button" : "submit"}
-        >
-          {!disabled ? "Save Changes" : "Edit Personal Information"}
-        </Button>
-      </CardFooter>
+        </CardFooter>
+      )}
     </Card>
   );
 };

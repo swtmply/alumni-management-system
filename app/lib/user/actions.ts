@@ -66,11 +66,14 @@ export async function updateProfile(
 ) {
   try {
     const session = await auth();
+
+    const { image, ...rest } = params;
+
     const updateProfile = await prisma.profile.update({
       where: {
         id: profileId,
       },
-      data: params,
+      data: rest,
     });
 
     await prisma.user.update({
@@ -79,6 +82,7 @@ export async function updateProfile(
       },
       data: {
         name: `${params.firstName} ${params.lastName}`,
+        image,
       },
     });
 
