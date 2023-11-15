@@ -35,9 +35,12 @@ export const authConfig = {
       return true;
     },
     session({ session, token }) {
-      session.user!.id = token.sub!;
-      // @ts-ignore
-      session.user!.role = token.role;
+      if (session.user) {
+        session.user.id = token.sub!;
+        // @ts-ignore
+        session.user.role = token.role;
+        session.user.image = token.picture;
+      }
       return session;
     },
     jwt({ token, user, trigger, session }) {

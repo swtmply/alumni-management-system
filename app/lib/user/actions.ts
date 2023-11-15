@@ -82,7 +82,6 @@ export async function updateProfile(
       },
       data: {
         name: `${params.firstName} ${params.lastName}`,
-        image,
       },
     });
 
@@ -113,6 +112,25 @@ export async function updateContact(
 
       return { message: "User profile updated successfully", ok: true };
     }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateImage(image: string) {
+  try {
+    const session = await auth();
+
+    await prisma.user.update({
+      where: {
+        id: session?.user?.id,
+      },
+      data: {
+        image,
+      },
+    });
+
+    return { message: "User profile updated successfully", ok: true };
   } catch (error) {
     throw error;
   }

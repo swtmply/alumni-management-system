@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import DatePicker from "./ui/date-picker";
-import { updateProfile } from "@/app/lib/user/actions";
+import { updateImage, updateProfile } from "@/app/lib/user/actions";
 import { useToast } from "./ui/use-toast";
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -72,7 +72,6 @@ const ProfileInfoCard = ({
   const { toast } = useToast();
   const router = useRouter();
   const [disabled, setDisabled] = useState(true);
-  const [isPending, startTransition] = useTransition();
   const { update } = useSession();
 
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -90,32 +89,37 @@ const ProfileInfoCard = ({
   const onSubmit = async (values: z.infer<typeof updatePersonalInfoSchema>) => {
     const file = inputFileRef.current?.files?.[0];
 
-    const fileResponse = await fetch(
-      `/api/avatar/upload?filename=${file?.name}`,
-      {
-        method: "POST",
-        body: file,
-      }
-    );
+    if (file) {
+      const fileResponse = await fetch(
+        `/api/avatar/upload?filename=${file?.name}`,
+        {
+          method: "POST",
+          body: file,
+        }
+      );
 
-    const newBlob = (await fileResponse.json()) as PutBlobResult;
+      const newBlob = (await fileResponse.json()) as PutBlobResult;
 
-    setBlob(newBlob);
+      setBlob(newBlob);
 
-    startTransition(async () => {
-      const response = await updateProfile(defaultValues.id, {
-        ...values,
-        image: newBlob.url,
-      });
-      toast({
-        title: response?.message,
-      });
+      await updateImage(newBlob.url);
+
       await update({
-        name: `${values.firstName} ${values.lastName}`,
-        image: blob?.url,
+        picture: newBlob.url,
       });
-      router.refresh();
+    }
+
+    const response = await updateProfile(defaultValues.id, values);
+
+    await update({
+      name: `${values.firstName} ${values.lastName}`,
     });
+
+    toast({
+      title: response?.message,
+    });
+
+    router.refresh();
   };
 
   return (
@@ -292,7 +296,6 @@ const ProfileInfoCard = ({
             variant={!disabled ? "default" : "outline"}
             form="personal-info-form"
             type={!disabled ? "button" : "submit"}
-            disabled={isPending}
           >
             {!disabled ? "Save Changes" : "Edit Personal Information"}
           </Button>
