@@ -1,12 +1,21 @@
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
-
 import UserInformationTabs from "@/components/user-information-tabs";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import AddCareerFormModal from "@/components/add-career-form-modal";
 
 const UserCareer = async ({ params }: { params: { userId: string } }) => {
   const session = await auth();
 
-  const career = await prisma.career.findUnique({
+  const careers = await prisma.career.findMany({
     where: { userId: params.userId },
   });
 
@@ -24,7 +33,35 @@ const UserCareer = async ({ params }: { params: { userId: string } }) => {
         </h2>
         <UserInformationTabs />
 
-        <p>Feature will be available soon.</p>
+        {editable && <AddCareerFormModal />}
+
+        {careers.map((career) => (
+          <Card key={career.id}>
+            <CardHeader>
+              <CardTitle>{career.companyName}</CardTitle>
+              <CardDescription>
+                {Intl.DateTimeFormat("PPP").format(career.startYear)} -{" "}
+                {Intl.DateTimeFormat("PPP").format(career.endYear)}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>
+                Position -{" "}
+                <span className="text-blue-500 font-bold">
+                  {career.position}
+                </span>
+              </p>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-2 items-start">
+              <p className="text-slate-500 text-sm">Projects Done: </p>
+              <ul>
+                {career.projectsDone.map((project) => (
+                  <li key={project}>{project}</li>
+                ))}
+              </ul>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
     </div>
   );
