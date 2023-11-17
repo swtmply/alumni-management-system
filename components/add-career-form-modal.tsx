@@ -31,10 +31,10 @@ import { useState } from "react";
 export const careerFormSchema = z.object({
   companyName: z
     .string()
-    .min(1, { message: "Student Number must have at least 1 character" }),
+    .min(1, { message: "Company Name must have at least 1 character" }),
   position: z
     .string()
-    .min(1, { message: "Student Number must have at least 1 character" }),
+    .min(1, { message: "Position must have at least 1 character" }),
   startYear: z.date(),
   endYear: z.date(),
   projectsDone: z

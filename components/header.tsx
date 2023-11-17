@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
+import { BookOpen, Contact } from "lucide-react";
+import Link from "next/link";
 
 const Header = ({
   session,
@@ -14,6 +16,21 @@ const Header = ({
 }) => {
   return (
     <div className="flex items-center gap-2 justify-end mb-8">
+      <ul className="flex gap-4 mr-4 text-slate-600">
+        <Link
+          href="/dashboard/about-us"
+          className="rounded-full hover:bg-slate-300 p-2"
+        >
+          <BookOpen />
+        </Link>
+        <Link
+          href="/dashboard/contact"
+          className="rounded-full hover:bg-slate-300 p-2"
+        >
+          <Contact />
+        </Link>
+      </ul>
+
       <div className="flex flex-col items-end">
         <p className="font-bold text-red-500 leading-3">{session?.name}</p>
         <p className="capitalize text-sm">{session?.role}</p>

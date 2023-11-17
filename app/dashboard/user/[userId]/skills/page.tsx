@@ -1,12 +1,22 @@
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
+import AddSkillFormModal from "@/components/add-skill-form-modal";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import UserInformationTabs from "@/components/user-information-tabs";
 
 const UserSkills = async ({ params }: { params: { userId: string } }) => {
   const session = await auth();
 
-  const skills = await prisma.skill.findUnique({
+  const skills = await prisma.skill.findMany({
     where: { userId: params.userId },
   });
 
@@ -24,7 +34,17 @@ const UserSkills = async ({ params }: { params: { userId: string } }) => {
         </h2>
         <UserInformationTabs />
 
-        <p>Feature will be available soon.</p>
+        {editable && <AddSkillFormModal />}
+
+        <div className="grid grid-cols-3 gap-2">
+          {skills.map((skill) => (
+            <Card key={skill.id}>
+              <CardHeader>
+                <CardTitle>{skill.name}</CardTitle>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
