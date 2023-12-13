@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authenticate } from "@/app/lib/auth/actions";
+import { useToast } from "./ui/use-toast";
 
 export const loginFormSchema = z.object({
   email: z
@@ -33,9 +34,18 @@ export default function LoginForm() {
       password: "",
     },
   });
+  const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    await authenticate(values);
+    const response = await authenticate(values);
+
+    if (response === "CredentialSignin") {
+      toast({
+        variant: "destructive",
+        title: "Invalid Credentials",
+        description: "Email or password is invalid.",
+      });
+    }
   };
 
   return (

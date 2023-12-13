@@ -25,9 +25,17 @@ import { registerFormSchema } from "@/components/register-form";
 import { register } from "@/app/lib/auth/actions";
 import { useToast } from "@/components/ui/use-toast";
 import { Dispatch, SetStateAction, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const addUserFormSchema = registerFormSchema.extend({
   name: z.string().min(1, { message: "Name is required" }),
+  role: z.enum(["admin", "user"]),
 });
 
 const AddUserModal = () => {
@@ -61,6 +69,7 @@ function AddUserForm({
       name: "",
       email: "",
       password: "",
+      role: "user",
     },
   });
 
@@ -117,6 +126,32 @@ function AddUserForm({
                   placeholder="Enter password"
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select user role." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="user">User</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
