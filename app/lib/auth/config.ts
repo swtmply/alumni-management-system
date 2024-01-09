@@ -19,24 +19,38 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      const isAdmin = auth?.user?.role === "admin";
+
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
-        if (auth.user?.role === "user")
+        if (!isAdmin) {
           return Response.redirect(new URL("/dashboard/user", nextUrl));
+        }
 
         return Response.redirect(new URL("/dashboard", nextUrl));
       }
+
       return true;
     },
     session({ session, token }) {
-      session.user!.id = token.sub!;
-      // @ts-ignore
-      session.user!.role = token.role;
+      if (session.user) {
+        session.user.id = token.sub!;
+        // @ts-ignore
+        session.user.role = token.role;
+        session.user.image = token.picture;
+      }
       return session;
     },
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
+      if (trigger === "update") {
+        token = {
+          ...token,
+          ...session,
+        };
+      }
+
       if (user) {
         // @ts-ignore
         token.role = user.role;

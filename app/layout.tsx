@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/app/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/components/providers";
+import { auth } from "./lib/auth";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -13,11 +15,13 @@ export const metadata: Metadata = {
   description: "Alumni management system for X university.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body
@@ -26,7 +30,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <main>{children}</main>
+        <main>
+          <Providers session={session}>{children}</Providers>
+        </main>
         <Toaster />
       </body>
     </html>

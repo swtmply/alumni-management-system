@@ -51,7 +51,7 @@ export async function createProfile(
     });
 
     if (createProfile) {
-      revalidatePath("/dashboard/user");
+      revalidatePath("/dashboard", "layout");
 
       return { message: "User profile created successfully", ok: true };
     }
@@ -66,11 +66,14 @@ export async function updateProfile(
 ) {
   try {
     const session = await auth();
-    const createProfile = await prisma.profile.update({
+
+    const { image, ...rest } = params;
+
+    const updateProfile = await prisma.profile.update({
       where: {
         id: profileId,
       },
-      data: params,
+      data: rest,
     });
 
     await prisma.user.update({
@@ -82,8 +85,8 @@ export async function updateProfile(
       },
     });
 
-    if (createProfile) {
-      revalidatePath("/dashboard");
+    if (updateProfile) {
+      revalidatePath("/dashboard", "layout");
 
       return { message: "User profile updated successfully", ok: true };
     }
@@ -97,18 +100,37 @@ export async function updateContact(
   params: z.infer<typeof updateContactInfoSchema>
 ) {
   try {
-    const createProfile = await prisma.profile.update({
+    const updateContact = await prisma.profile.update({
       where: {
         id: profileId,
       },
       data: params,
     });
 
-    if (createProfile) {
-      revalidatePath("/dashboard");
+    if (updateContact) {
+      revalidatePath("/dashboard/user/profile");
 
       return { message: "User profile updated successfully", ok: true };
     }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateImage(image: string) {
+  try {
+    const session = await auth();
+
+    await prisma.user.update({
+      where: {
+        id: session?.user?.id,
+      },
+      data: {
+        image,
+      },
+    });
+
+    return { message: "User profile updated successfully", ok: true };
   } catch (error) {
     throw error;
   }

@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import DatePicker from "./ui/date-picker";
 import { createProfile } from "@/app/lib/user/actions";
 import { useToast } from "./ui/use-toast";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const createProfileSchema = z.object({
   studentNumber: z
@@ -43,6 +45,8 @@ export const createProfileSchema = z.object({
 
 export default function ProfileForm() {
   const { toast } = useToast();
+  const { update } = useSession();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof createProfileSchema>>({
     resolver: zodResolver(createProfileSchema),
@@ -62,6 +66,9 @@ export default function ProfileForm() {
 
     if (response?.ok) {
       form.reset();
+
+      await update({ name: `${values.firstName} ${values.lastName}` });
+      router.refresh();
     }
     toast({
       title: response?.message,

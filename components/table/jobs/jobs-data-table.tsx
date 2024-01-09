@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { JobsDataTableToolbar } from "./jobs-data-toolbar";
 import AddJobModal from "./add-job-modal";

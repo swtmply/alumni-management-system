@@ -68,7 +68,7 @@ export default function RegisterForm() {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  type="passsword"
+                  type="password"
                   placeholder="Enter password"
                   {...field}
                 />

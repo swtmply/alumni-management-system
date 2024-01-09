@@ -1,7 +1,8 @@
 import { GraduationCap } from "lucide-react";
 import { auth } from "../lib/auth";
-import Navigation from "@/components/navigation";
-import Image from "next/image";
+import Navigation, { NavigationSkeleton } from "@/components/navigation";
+import Header, { HeaderSkeleton } from "@/components/header";
+import { Suspense } from "react";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -15,26 +16,20 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
             Career Tracking System
           </span>
         </h1>
-        <Navigation role={session?.user?.role} />
+        <Suspense fallback={<NavigationSkeleton />}>
+          <Navigation role={session?.user?.role} />
+        </Suspense>
       </div>
       <main className="flex flex-col px-4 py-12 w-full">
-        <div className="flex items-center gap-2 justify-end mb-8">
-          <div className="flex flex-col items-end">
-            <p className="font-bold text-red-500 leading-3">
-              {session?.user?.name}
-            </p>
-            <p className="capitalize text-sm">{session?.user?.role}</p>
-          </div>
-
-          <div className="rounded-full bg-slate-400 aspect-square h-12 relative">
-            <Image
-              src={"https://github.com/swtmply.png"}
-              className="rounded-full"
-              alt="Avatar"
-              fill
-            />
-          </div>
-        </div>
+        <Suspense fallback={<HeaderSkeleton />}>
+          <Header
+            session={{
+              name: session?.user?.name,
+              role: session?.user?.role,
+              image: session?.user?.image,
+            }}
+          />
+        </Suspense>
         {children}
       </main>
     </div>

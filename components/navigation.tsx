@@ -1,11 +1,20 @@
 "use client";
 
 import { cn } from "@/app/lib/utils";
-import { FolderSearch, LayoutDashboard, Users2 } from "lucide-react";
+import {
+  File,
+  FolderSearch,
+  Home,
+  LayoutDashboard,
+  User2,
+  Users2,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import SignOutButton from "./sign-out-button";
+import { Skeleton } from "./ui/skeleton";
+import { useSession } from "next-auth/react";
 
 interface NavigationProps {
   role: string | undefined;
@@ -17,6 +26,8 @@ interface NavigationItemProps {
 }
 
 const Navigation = ({ role }: NavigationProps) => {
+  const { data: session } = useSession();
+
   return (
     <nav className="mt-12 flex flex-col justify-between h-full">
       <ul className="flex flex-col gap-4">
@@ -34,17 +45,27 @@ const Navigation = ({ role }: NavigationProps) => {
               <FolderSearch />
               Jobs
             </NavigationItem>
+            <NavigationItem href="/dashboard/documents">
+              <File />
+              Documents
+            </NavigationItem>
           </>
         ) : (
           <>
-            <NavigationItem href="/dashboard/user">Home</NavigationItem>
+            <NavigationItem href="/dashboard/user">
+              <Home />
+              Home
+            </NavigationItem>
             <NavigationItem href="/dashboard/user/documents">
+              <File />
               Documents
             </NavigationItem>
-            <NavigationItem href="/dashboard/user/profile">
+            <NavigationItem
+              href={`/dashboard/user/${session?.user?.id}/profile`}
+            >
+              <User2 />
               Profile
             </NavigationItem>
-            <NavigationItem href="/dashboard/user/jobs">Jobs</NavigationItem>
           </>
         )}
       </ul>
@@ -67,6 +88,37 @@ const NavigationItem = ({ href, children }: NavigationItemProps) => {
     >
       {children}
     </Link>
+  );
+};
+
+export const NavigationSkeleton = () => {
+  return (
+    <div className="mt-12 flex flex-col justify-between h-full">
+      <ul className="flex flex-col gap-4">
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+        <li>
+          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+            <Skeleton className="w-6 h-6" />
+            <Skeleton className="w-40 h-6" />
+          </div>
+        </li>
+      </ul>
+      <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+        <Skeleton className="w-6 h-6" />
+        <Skeleton className="w-40 h-6" />
+      </div>
+    </div>
   );
 };
 

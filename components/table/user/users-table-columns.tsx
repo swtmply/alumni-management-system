@@ -4,11 +4,22 @@ import { cn } from "@/app/lib/utils";
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import UpdateUserModal from "./update-user-modal";
+import Link from "next/link";
 
 export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    cell: ({ row }) => {
+      return (
+        <Link
+          className="text-blue-500"
+          href={`/dashboard/user/${row.original.id}/profile`}
+        >
+          {row.getValue("name")}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "email",

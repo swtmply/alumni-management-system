@@ -20,15 +20,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import AddUserModal from "./add-user-modal";
-import { UserDataTableToolbar } from "./user-data-toolbar";
+import { DocumentsDataTableToolbar } from "./documents-data-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function UserDataTable<TData, TValue>({
+export function DocumentsDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -49,8 +48,7 @@ export function UserDataTable<TData, TValue>({
   return (
     <div>
       <div className="flex justify-between items-center py-4">
-        <UserDataTableToolbar table={table} />
-        <AddUserModal />
+        <DocumentsDataTableToolbar table={table} />
       </div>
       <div className="rounded-md border">
         <Table>
