@@ -2,6 +2,7 @@
 
 import { cn } from "@/app/lib/utils";
 import {
+  CalendarDays,
   File,
   FolderSearch,
   Home,
@@ -49,6 +50,10 @@ const Navigation = ({ role }: NavigationProps) => {
               <File />
               Documents
             </NavigationItem>
+            <NavigationItem href="/dashboard/events">
+              <CalendarDays />
+              Events
+            </NavigationItem>
           </>
         ) : (
           <>
@@ -59,6 +64,10 @@ const Navigation = ({ role }: NavigationProps) => {
             <NavigationItem href="/dashboard/user/documents">
               <File />
               Documents
+            </NavigationItem>
+            <NavigationItem href="/dashboard/user/events">
+              <CalendarDays />
+              Events
             </NavigationItem>
             <NavigationItem
               href={`/dashboard/user/${session?.user?.id}/profile`}

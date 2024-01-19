@@ -78,3 +78,14 @@
 .rdp-vhidden {
   @apply hidden;
 }
+
+.fc {
+  @apply font-sans;
+}
+
+.fc-highlight {
+  @apply !bg-gray-200;
+}
+.fc-toolbar-title {
+  @apply text-foreground !text-lg font-semibold;
+}
