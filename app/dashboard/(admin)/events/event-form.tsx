@@ -33,7 +33,6 @@ import {
 } from "react-aria-components";
 import { parseDate } from "@internationalized/date";
 import React from "react";
-import { DateClickArg } from "@fullcalendar/interaction/index.js";
 
 export const eventFormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
