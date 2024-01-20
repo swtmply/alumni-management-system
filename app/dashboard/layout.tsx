@@ -9,7 +9,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex relative">
-      <div className="h-screen max-h-screen w-full max-w-xs sticky top-0 bg-red-500 text-white px-4 py-10 flex flex-col">
+      <div className="h-screen max-h-screen w-full max-w-xs sticky top-0 border-r text-foreground px-4 py-10 flex flex-col">
         <h1 className="flex items-center gap-4">
           <GraduationCap className="w-10 h-10" />
           <span className="font-semibold text-xl max-w-[10rem] leading-5">

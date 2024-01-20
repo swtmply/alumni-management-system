@@ -8,7 +8,7 @@ const SignOutButton = () => {
   return (
     <Button
       variant={"ghost"}
-      className="hover:bg-red-600/40 gap-2 hover:text-white justify-start text-base p-2 rounded-md duration-150 w-full"
+      className="hover:bg-green-600 gap-2 hover:text-white justify-start text-base p-2 rounded-md duration-150 w-full"
       onClick={async () => await logout()}
     >
       <LogOut />
