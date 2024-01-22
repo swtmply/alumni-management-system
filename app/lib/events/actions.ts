@@ -23,6 +23,18 @@ export const createEvent = async (params: {
     return { message: "Event created successfully", ok: true };
   } catch (e) {
     console.log(e);
-    return { matchMedia: "Something went wrong", ok: false };
+    return { message: "Something went wrong", ok: false };
+  }
+};
+
+export const deleteEvent = async (id: string) => {
+  try {
+    await prisma.event.delete({ where: { id } });
+
+    revalidatePath("/dashboard/events");
+    return { message: "Event deleted successfully", ok: true };
+  } catch (error) {
+    console.log(error);
+    return { message: "Something went wrong", ok: false };
   }
 };

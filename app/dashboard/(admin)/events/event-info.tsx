@@ -9,6 +9,8 @@ import {
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { deleteEvent } from "@/app/lib/events/actions";
+import { toast } from "@/components/ui/use-toast";
 
 type EventInfoProps = {
   selectedEvent: EventClickArg | undefined;
@@ -55,8 +57,20 @@ const EventInfo = ({ selectedEvent, setSelectedEvent }: EventInfoProps) => {
 
         {role === "admin" && (
           <div className="flex gap-2">
-            <Button variant={"outline"}>Edit</Button>
-            <Button variant={"destructive"}>Delete</Button>
+            <Button
+              onClick={async () => {
+                const response = await deleteEvent(selectedEvent?.event.id!);
+
+                toast({
+                  title: response.message,
+                });
+
+                setSelectedEvent(undefined);
+              }}
+              variant={"destructive"}
+            >
+              Delete
+            </Button>
           </div>
         )}
       </DialogContent>

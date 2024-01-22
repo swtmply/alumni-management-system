@@ -40,6 +40,7 @@ const EventCalendar = ({ events }: { events: Event[] }) => {
             }}
             eventClick={setSelectedEvent}
             events={events.map((event) => ({
+              id: event.id,
               title: event.title,
               start: event.startDate || undefined,
               end: event.endDate || undefined,

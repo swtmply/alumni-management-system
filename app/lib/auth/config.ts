@@ -1,6 +1,7 @@
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "../db";
+
 declare module "next-auth" {
   interface Session {
     user?: {
@@ -34,10 +35,11 @@ export const authConfig = {
 
       return true;
     },
-    session({ session, token }) {
+    session(params) {
+      const { session, token } = params as any;
+
       if (session.user) {
-        session.user.id = token.sub!;
-        // @ts-ignore
+        session.user.id = token.sub;
         session.user.role = token.role;
         session.user.image = token.picture;
       }
