@@ -16,18 +16,18 @@ const Header = ({
 }) => {
   return (
     <div className="flex items-center gap-2 justify-end mb-8">
-      <ul className="flex gap-4 mr-4 text-slate-600">
+      <ul className="flex mr-4 text-slate-600">
         <Link
           href="/dashboard/about-us"
-          className="rounded-full hover:bg-slate-300 p-2"
+          className="rounded-full hover:underline p-2"
         >
-          <BookOpen />
+          About us
         </Link>
         <Link
           href="/dashboard/contact"
-          className="rounded-full hover:bg-slate-300 p-2"
+          className="rounded-full hover:underline p-2"
         >
-          <Contact />
+          Contact
         </Link>
       </ul>
 

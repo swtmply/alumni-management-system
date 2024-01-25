@@ -31,7 +31,6 @@ export const {
           if (passwordMatch) return user;
         }
 
-        console.log("Invalid Credentials");
         return null;
       },
     }),

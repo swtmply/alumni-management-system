@@ -2,6 +2,7 @@
 
 import { cn } from "@/app/lib/utils";
 import {
+  CalendarDays,
   File,
   FolderSearch,
   Home,
@@ -49,6 +50,10 @@ const Navigation = ({ role }: NavigationProps) => {
               <File />
               Documents
             </NavigationItem>
+            <NavigationItem href="/dashboard/events">
+              <CalendarDays />
+              Events
+            </NavigationItem>
           </>
         ) : (
           <>
@@ -59,6 +64,10 @@ const Navigation = ({ role }: NavigationProps) => {
             <NavigationItem href="/dashboard/user/documents">
               <File />
               Documents
+            </NavigationItem>
+            <NavigationItem href="/dashboard/user/events">
+              <CalendarDays />
+              Events
             </NavigationItem>
             <NavigationItem
               href={`/dashboard/user/${session?.user?.id}/profile`}
@@ -81,8 +90,8 @@ const NavigationItem = ({ href, children }: NavigationItemProps) => {
   return (
     <Link
       className={cn(
-        "flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150",
-        currentPath && "bg-red-600 hover:bg-red-600 font-medium"
+        "flex gap-2 hover:bg-green-600 hover:text-white p-2 rounded-md duration-150",
+        currentPath && "bg-green-600 hover:bg-green-600 font-medium text-white"
       )}
       href={href}
     >
@@ -96,25 +105,25 @@ export const NavigationSkeleton = () => {
     <div className="mt-12 flex flex-col justify-between h-full">
       <ul className="flex flex-col gap-4">
         <li>
-          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+          <div className="flex gap-2 hover:bg-green-600 p-2 rounded-md duration-150">
             <Skeleton className="w-6 h-6" />
             <Skeleton className="w-40 h-6" />
           </div>
         </li>
         <li>
-          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+          <div className="flex gap-2 hover:bg-green-600 p-2 rounded-md duration-150">
             <Skeleton className="w-6 h-6" />
             <Skeleton className="w-40 h-6" />
           </div>
         </li>
         <li>
-          <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+          <div className="flex gap-2 hover:bg-green-600 p-2 rounded-md duration-150">
             <Skeleton className="w-6 h-6" />
             <Skeleton className="w-40 h-6" />
           </div>
         </li>
       </ul>
-      <div className="flex gap-2 hover:bg-red-600/40 p-2 rounded-md duration-150">
+      <div className="flex gap-2 hover:bg-green-600 p-2 rounded-md duration-150">
         <Skeleton className="w-6 h-6" />
         <Skeleton className="w-40 h-6" />
       </div>

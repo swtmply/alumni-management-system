@@ -1,20 +1,28 @@
 "use client";
 
 import { cn } from "@/app/lib/utils";
-import { User } from "@prisma/client";
+import { Profile, User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import UpdateUserModal from "./update-user-modal";
 import Link from "next/link";
 
-export const userColumns: ColumnDef<User>[] = [
+type UserWithProfile = User & {
+  profile: Profile | null;
+};
+
+export const userColumns: ColumnDef<UserWithProfile>[] = [
   {
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
+      const isAdmin = row.original.role === "admin";
+
       return (
         <Link
-          className="text-blue-500"
-          href={`/dashboard/user/${row.original.id}/profile`}
+          className={cn(
+            isAdmin ? "text-black cursor-default" : "text-blue-500"
+          )}
+          href={isAdmin ? "#" : `/dashboard/user/${row.original.id}/profile`}
         >
           {row.getValue("name")}
         </Link>
@@ -24,6 +32,10 @@ export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "email",
     header: "Email",
+  },
+  {
+    accessorKey: "profile.course",
+    header: "Course",
   },
   {
     accessorKey: "role",
