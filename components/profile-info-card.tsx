@@ -142,7 +142,7 @@ const ProfileInfoCard = ({
                   <FormLabel className="w-1/2">Image</FormLabel>
                   <FormControl>
                     <div
-                      className="w-32 h-32 rounded-full bg-slate-500 relative"
+                      className="w-32 h-32 rounded-full bg-slate-300 relative"
                       onClick={() => inputFileRef.current?.click()}
                     >
                       <Image
@@ -150,9 +150,9 @@ const ProfileInfoCard = ({
                           (preview && URL.createObjectURL(preview)) ||
                           image ||
                           blob?.url ||
-                          ""
+                          "/images/placeholder.jpg"
                         }
-                        alt="User Image"
+                        alt="Profile Icon"
                         fill
                         className="rounded-full"
                       />
