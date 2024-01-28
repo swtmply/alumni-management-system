@@ -22,7 +22,12 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       </div>
       <main className="flex flex-col px-4 py-12 w-full">
         <Suspense fallback={<HeaderSkeleton />}>
-          <Header />
+          <Header
+            session={{
+              name: session?.user?.name,
+              role: session?.user?.role,
+            }}
+          />
         </Suspense>
         {children}
       </main>

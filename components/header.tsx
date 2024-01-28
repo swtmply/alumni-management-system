@@ -1,9 +1,19 @@
+import Image from "next/image";
 import { Skeleton } from "./ui/skeleton";
 import Link from "next/link";
 
-const Header = () => {
+const Header = ({
+  session,
+}: {
+  session:
+    | {
+        name: string | null | undefined;
+        role: string | null | undefined;
+      }
+    | undefined;
+}) => {
   return (
-    <div className="flex items-center justify-end mb-8">
+    <div className="flex items-center gap-2 justify-end mb-8">
       <ul className="flex mr-4 text-slate-600">
         <Link
           href="/dashboard/about-us"
@@ -18,6 +28,19 @@ const Header = () => {
           Contact
         </Link>
       </ul>
+      <div className="flex flex-col items-end">
+        <p className="font-bold text-red-500 leading-3">{session?.name}</p>
+        <p className="capitalize text-sm">{session?.role}</p>
+      </div>
+
+      <div className="rounded-full bg-slate-400 aspect-square h-12 relative">
+        <Image
+          src={"/images/placeholder.jpg"}
+          className="rounded-full"
+          alt="Avatar"
+          fill
+        />
+      </div>
     </div>
   );
 };
