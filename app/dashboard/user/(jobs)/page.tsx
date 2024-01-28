@@ -26,7 +26,7 @@ async function UserHomePage() {
   });
 
   if (!profile) {
-    redirect("/dashboard/user/profile");
+    redirect(`/dashboard/user/${session?.user?.id}/profile`);
   }
 
   return (

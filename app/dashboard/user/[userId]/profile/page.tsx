@@ -13,12 +13,6 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
     where: { userId: params.userId },
   });
 
-  const user = await prisma.user.findUnique({
-    where: { id: profile?.userId! },
-  });
-
-  const editable = session?.user?.id === user?.id;
-
   if (!profile)
     return (
       <div className="w-full flex flex-col justify-center items-center">
@@ -30,6 +24,12 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
         </div>
       </div>
     );
+
+  const user = await prisma.user.findUnique({
+    where: { id: profile?.userId! },
+  });
+
+  const editable = session?.user?.id === user?.id;
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
