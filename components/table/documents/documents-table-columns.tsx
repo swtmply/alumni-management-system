@@ -8,8 +8,23 @@ import { zonedTimeToUtc, format } from "date-fns-tz";
 
 export const documentsColumns: ColumnDef<Schedule>[] = [
   {
+    accessorKey: "userId",
+    header: "Name",
+  },
+  {
     accessorKey: "documents",
     header: "Documents Requested",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Date Requested",
+    cell: ({ row }) => {
+      const date = row.getValue("createdAt") as Date;
+
+      return format(zonedTimeToUtc(date, "Asia/Singapore"), "PP", {
+        timeZone: "Asia/Singapore",
+      });
+    },
   },
   {
     accessorKey: "date",

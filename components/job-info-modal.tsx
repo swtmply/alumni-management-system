@@ -96,7 +96,7 @@ function ViewJobForm({ job }: { job: Job }) {
         </div>
         {/* skills */}
         <div>
-          <p className="text-sm font-medium">Contact Details</p>
+          <p className="text-sm font-medium">Skill Required</p>
           <p className="text-slate-600 flex gap-2 flex-wrap mt-2">
             {job.skills.map((skill) => (
               <Badge key={skill} variant={"outline"}>
@@ -107,7 +107,7 @@ function ViewJobForm({ job }: { job: Job }) {
         </div>
         {/* Courses */}
         <div>
-          <p className="text-sm font-medium">Contact Details</p>
+          <p className="text-sm font-medium">Related Course</p>
           <p className="text-slate-600 flex gap-2 flex-wrap mt-2">
             {job.courses.map((course) => (
               <Badge key={course} variant={"outline"}>

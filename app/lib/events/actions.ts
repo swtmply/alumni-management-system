@@ -5,15 +5,20 @@ import prisma from "../db";
 
 export const createEvent = async (params: {
   title: string;
+  image?: string;
+  link?: string;
+  description?: string;
   end: Date;
   start: Date;
 }) => {
   try {
+    const { end, start, ...rest } = params;
+
     const event = await prisma.event.create({
       data: {
-        endDate: params.end,
-        startDate: params.start,
-        title: params.title,
+        endDate: end,
+        startDate: start,
+        ...rest,
       },
     });
 
