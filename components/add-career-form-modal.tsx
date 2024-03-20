@@ -27,6 +27,7 @@ import { TagInput } from "./ui/tag-input";
 import { useToast } from "./ui/use-toast";
 import { createCareer } from "@/app/lib/career/actions";
 import { useState } from "react";
+import { Checkbox } from "./ui/checkbox";
 
 export const careerFormSchema = z.object({
   companyName: z
@@ -37,6 +38,7 @@ export const careerFormSchema = z.object({
     .min(1, { message: "Position must have at least 1 character" }),
   startYear: z.date(),
   endYear: z.date(),
+  present: z.boolean(),
   projectsDone: z
     .array(z.string())
     .min(1, { message: "Projects done must have at least 1" }),
@@ -126,6 +128,23 @@ export default function AddCareerFormModal() {
                   <FormLabel>End Date</FormLabel>
                   <FormControl>
                     <DatePicker field={field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="present"
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-1">
+                  <FormLabel>Present</FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="!mt-0"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

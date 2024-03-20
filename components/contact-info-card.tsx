@@ -26,6 +26,7 @@ import { updateContact } from "@/app/lib/user/actions";
 import { useToast } from "./ui/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export const updateContactInfoSchema = z.object({
   phoneNumber: z
@@ -71,7 +72,7 @@ const ContactInfoCard = ({ defaultValues, editable }: ContactInfoProps) => {
       <CardContent>
         <Form {...form}>
           <form
-            id="personal-info-form"
+            id="contact-info-form"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-5 mt-4 w-full"
           >
@@ -116,12 +117,16 @@ const ContactInfoCard = ({ defaultValues, editable }: ContactInfoProps) => {
             </Button>
           )}
           <Button
+            disabled={form.formState.isSubmitting}
             onClick={() => setDisabled((prev) => !prev)}
             variant={!disabled ? "default" : "outline"}
-            form="personal-info-form"
+            form="contact-info-form"
             type={!disabled ? "button" : "submit"}
           >
-            {!disabled ? "Save Changes" : "Edit Personal Information"}
+            {form.formState.isSubmitting && (
+              <Loader2 className="animate-spin mr-2" />
+            )}
+            {!disabled ? "Save Changes" : "Edit Contact Information"}
           </Button>
         </CardFooter>
       )}

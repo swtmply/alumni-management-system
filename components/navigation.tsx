@@ -55,6 +55,11 @@ const Navigation = ({ role }: NavigationProps) => {
               Events
             </NavigationItem>
           </>
+        ) : !session?.user?.verified ? (
+          <NavigationItem href={`/dashboard/user/${session?.user?.id}/profile`}>
+            <User2 />
+            Profile
+          </NavigationItem>
         ) : (
           <>
             <NavigationItem href="/dashboard/user">

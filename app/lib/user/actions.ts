@@ -7,6 +7,8 @@ import { createProfileSchema } from "@/components/profile-form";
 import { auth } from "../auth";
 import { updatePersonalInfoSchema } from "@/components/profile-info-card";
 import { updateContactInfoSchema } from "@/components/contact-info-card";
+import { updateAddressSchema } from "@/components/address-info-card";
+import cuid from "cuid";
 
 export async function verifyUser(id: string) {
   try {
@@ -34,10 +36,18 @@ export async function createProfile(
 ) {
   try {
     const session = await auth();
+
+    const { address, ...rest } = params;
+
     const createProfile = await prisma.profile.create({
       data: {
         userId: session?.user?.id,
-        ...params,
+        ...rest,
+        address: {
+          create: {
+            ...address,
+          },
+        },
       },
     });
 
@@ -104,7 +114,9 @@ export async function updateContact(
       where: {
         id: profileId,
       },
-      data: params,
+      data: {
+        phoneNumber: params.phoneNumber,
+      },
     });
 
     if (updateContact) {
@@ -131,6 +143,33 @@ export async function updateImage(image: string) {
     });
 
     return { message: "User profile updated successfully", ok: true };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateAddress(
+  addressId: string | undefined,
+  params: z.infer<typeof updateAddressSchema>,
+  profileId: string
+) {
+  try {
+    const updateAddress = await prisma.address.upsert({
+      where: {
+        id: addressId || cuid(),
+      },
+      create: {
+        ...params,
+        profileId,
+      },
+      update: params,
+    });
+
+    if (updateAddress) {
+      revalidatePath("/dashboard/user/profile");
+
+      return { message: "User profile updated successfully", ok: true };
+    }
   } catch (error) {
     throw error;
   }

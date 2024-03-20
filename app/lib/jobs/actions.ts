@@ -5,10 +5,16 @@ import { addJobFormSchema } from "@/components/table/jobs/add-job-modal";
 import prisma from "../db";
 import { revalidatePath } from "next/cache";
 import { editJobFormSchema } from "@/components/table/jobs/edit-job-modal";
+import { auth } from "../auth";
 
 export const createJob = async (values: z.infer<typeof addJobFormSchema>) => {
   try {
-    const job = await prisma.job.create({ data: values });
+    const session = await auth();
+    const role = session?.user?.role;
+
+    const job = await prisma.job.create({
+      data: { ...values, status: role === "admin" ? "approved" : "pending" },
+    });
 
     if (!job) return { message: "Something went wrong", ok: false };
 

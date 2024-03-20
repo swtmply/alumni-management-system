@@ -45,6 +45,7 @@ export const editJobFormSchema = z.object({
   contactDetails: z
     .array(z.string())
     .min(1, { message: "Contact must have at least 1 detail" }),
+  status: z.string().optional(),
 });
 
 const EditJobModal = ({ job }: { job: Job }) => {
@@ -76,7 +77,10 @@ function EditJobForm({
 
   const form = useForm<z.infer<typeof editJobFormSchema>>({
     resolver: zodResolver(editJobFormSchema),
-    defaultValues: job,
+    defaultValues: {
+      ...job,
+      status: job.status || "pending",
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof editJobFormSchema>) => {

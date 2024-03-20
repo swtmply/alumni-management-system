@@ -29,6 +29,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { PutBlobResult } from "@vercel/blob";
+import { Loader2 } from "lucide-react";
+import { Address } from "@prisma/client";
 
 export const updatePersonalInfoSchema = z.object({
   studentNumber: z
@@ -292,11 +294,15 @@ const ProfileInfoCard = ({
             </Button>
           )}
           <Button
+            disabled={form.formState.isSubmitting}
             onClick={() => setDisabled((prev) => !prev)}
             variant={!disabled ? "default" : "outline"}
             form="personal-info-form"
             type={!disabled ? "button" : "submit"}
           >
+            {form.formState.isSubmitting && (
+              <Loader2 className="animate-spin mr-2" />
+            )}
             {!disabled ? "Save Changes" : "Edit Personal Information"}
           </Button>
         </CardFooter>

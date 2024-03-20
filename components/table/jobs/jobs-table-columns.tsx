@@ -3,6 +3,7 @@
 import { Job } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import JobsRowActions from "./jobs-row-actions";
+import ApproveJobModal from "./approve-job-modal";
 
 export const jobsColumns: ColumnDef<Job>[] = [
   {
@@ -34,6 +35,29 @@ export const jobsColumns: ColumnDef<Job>[] = [
   {
     accessorKey: "experience",
     header: "Years of Experience",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+
+      return (
+        <ApproveJobModal job={row.original}>
+          <button
+            className={`px-2 py-1 text-xs font-semibold rounded-full capitalize ${
+              status === "approved"
+                ? "bg-green-100 text-green-800"
+                : status === "rejected"
+                ? "bg-red-100 text-red-800"
+                : "bg-yellow-100 text-yellow-800"
+            }`}
+          >
+            {status}
+          </button>
+        </ApproveJobModal>
+      );
+    },
   },
   {
     id: "actions",
