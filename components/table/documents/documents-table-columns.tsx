@@ -8,7 +8,7 @@ import { zonedTimeToUtc, format } from "date-fns-tz";
 
 export const documentsColumns: ColumnDef<Schedule>[] = [
   {
-    accessorKey: "userId",
+    accessorKey: "user.name",
     header: "Name",
   },
   {
@@ -31,6 +31,15 @@ export const documentsColumns: ColumnDef<Schedule>[] = [
     header: "Date for Document(s) Release",
     cell: ({ row }) => {
       const date = row.getValue("date") as Date;
+      const status = row.getValue("status") as string;
+
+      if (status === "Pending") {
+        return "Pending";
+      }
+
+      if (status === "Rejected") {
+        return "Rejected";
+      }
 
       return format(zonedTimeToUtc(date, "Asia/Singapore"), "PP", {
         timeZone: "Asia/Singapore",

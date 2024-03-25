@@ -34,54 +34,56 @@ const Header = ({ courses }: { courses: string[] }) => {
 
   return (
     <div className="flex items-center gap-2 justify-end mb-8">
-      <div className="flex items-center gap-2 flex-grow">
-        <div className="w-full flex gap-2 max-w-3xl">
-          <div className="relative w-full">
-            <Label className="absolute -top-5 left-0">Search</Label>
-            <Input placeholder="Enter Keyword" {...form.register("search")} />
-          </div>
+      {pathname === "/dashboard/user" && (
+        <div className="flex items-center gap-2 flex-grow">
+          <div className="w-full flex gap-2 max-w-3xl">
+            <div className="relative w-full">
+              <Label className="absolute -top-5 left-0">Search</Label>
+              <Input placeholder="Enter Keyword" {...form.register("search")} />
+            </div>
 
-          <div className="relative w-full">
-            <Label className="absolute -top-5 left-0">Course</Label>
-            <Select
-              onValueChange={(e) => {
-                form.setValue("course", e);
+            <div className="relative w-full">
+              <Label className="absolute -top-5 left-0">Course</Label>
+              <Select
+                onValueChange={(e) => {
+                  form.setValue("course", e);
+                }}
+                defaultValue={form.getValues("course")}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Course" />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.map((course) => (
+                    <SelectItem key={course} value={course}>
+                      {course}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button
+              onClick={() => {
+                const searchValue = form.getValues("search");
+                const courseValue = form.getValues("course");
+
+                const params = new URLSearchParams();
+                params.set("search", searchValue);
+                params.set("course", courseValue);
+
+                const queryString = params.toString();
+
+                router.push(`${pathname}?${queryString}`);
               }}
-              defaultValue={form.getValues("course")}
+              className="flex gap-2"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Course" />
-              </SelectTrigger>
-              <SelectContent>
-                {courses.map((course) => (
-                  <SelectItem key={course} value={course}>
-                    {course}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Search className="w-4 h-4" />
+              Search
+            </Button>
           </div>
-
-          <Button
-            onClick={() => {
-              const searchValue = form.getValues("search");
-              const courseValue = form.getValues("course");
-
-              const params = new URLSearchParams();
-              params.set("search", searchValue);
-              params.set("course", courseValue);
-
-              const queryString = params.toString();
-
-              router.push(`${pathname}?${queryString}`);
-            }}
-            className="flex gap-2"
-          >
-            <Search className="w-4 h-4" />
-            Search
-          </Button>
         </div>
-      </div>
+      )}
 
       <ul className="flex mr-4 text-slate-600">
         <Link

@@ -22,15 +22,18 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { JobsDataTableToolbar } from "./jobs-data-toolbar";
 import AddJobModal from "./add-job-modal";
+import { DataTableFacetedFilter } from "./jobs-faceted-filter";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  courses: string[];
 }
 
 export function JobsDataTable<TData, TValue>({
   columns,
   data,
+  courses,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -48,8 +51,20 @@ export function JobsDataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex justify-between items-center py-4">
-        <JobsDataTableToolbar table={table} />
+      <div className="flex justify-between items-center py-4 w-full">
+        <div className="flex gap-2">
+          <JobsDataTableToolbar table={table} />
+          {table.getColumn("courses") && (
+            <DataTableFacetedFilter
+              column={table.getColumn("courses")}
+              title="Courses"
+              options={courses.map((course) => ({
+                label: course,
+                value: course,
+              }))}
+            />
+          )}
+        </div>
         <AddJobModal />
       </div>
       <div className="rounded-md border">

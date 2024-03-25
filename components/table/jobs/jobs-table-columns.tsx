@@ -31,6 +31,13 @@ export const jobsColumns: ColumnDef<Job>[] = [
   {
     accessorKey: "courses",
     header: "Related Courses",
+    filterFn: (rows, id, filterValue) => {
+      return (
+        filterValue.filter((value: string) =>
+          (rows.getValue(id) as string[]).includes(value)
+        ).length !== 0
+      );
+    },
   },
   {
     accessorKey: "experience",

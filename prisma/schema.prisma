@@ -94,6 +94,7 @@ model Profile {
   phoneNumber    String
   course         String
   yearOfGraduate String
+  employed       Boolean  @default(false)
   address        Address?
   user           User?    @relation(fields: [userId], references: [id])
   userId         String?  @unique
@@ -106,6 +107,7 @@ model Career {
   startYear    DateTime
   endYear      DateTime
   present      Boolean
+  description  String
   projectsDone String[]
   user         User?    @relation(fields: [userId], references: [id])
   userId       String?

@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddCareerFormModal from "@/components/add-career-form-modal";
+import EditCareerFormModal from "@/components/edit-career-form-modal";
 
 const UserCareer = async ({ params }: { params: { userId: string } }) => {
   const session = await auth();
@@ -47,10 +48,26 @@ const UserCareer = async ({ params }: { params: { userId: string } }) => {
           {careers.map((career) => (
             <Card key={career.id}>
               <CardHeader>
-                <CardTitle>{career.companyName}</CardTitle>
+                <CardTitle className="flex items-center justify-between">
+                  {career.companyName}{" "}
+                  <span>
+                    {career.present && (
+                      <span className="text-green-500 bg-green-100 font-normal text-xs px-2 py-1 rounded-full ml-4">
+                        Present
+                      </span>
+                    )}
+                    <span>
+                      {editable && (
+                        <EditCareerFormModal defaultValues={career} />
+                      )}
+                    </span>
+                  </span>
+                </CardTitle>
                 <CardDescription>
                   {Intl.DateTimeFormat("PPP").format(career.startYear)} -{" "}
-                  {Intl.DateTimeFormat("PPP").format(career.endYear)}
+                  {career.present
+                    ? "Present"
+                    : Intl.DateTimeFormat("PPP").format(career.endYear)}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -59,6 +76,9 @@ const UserCareer = async ({ params }: { params: { userId: string } }) => {
                   <span className="text-blue-500 font-bold">
                     {career.position}
                   </span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {career.description}
                 </p>
               </CardContent>
               <CardFooter className="flex flex-col gap-2 items-start">

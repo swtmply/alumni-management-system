@@ -5,6 +5,7 @@ import { documentsColumns } from "@/components/table/documents/documents-table-c
 const DocumentsPage = async () => {
   const documents = await prisma.schedule.findMany({
     orderBy: { updatedAt: "desc" },
+    include: { user: true },
   });
 
   return (

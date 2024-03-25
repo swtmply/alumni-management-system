@@ -39,7 +39,7 @@ const UserSkills = async ({ params }: { params: { userId: string } }) => {
         {skills.length === 0 && (
           <div>
             <h4 className="text-xl font-semibold">
-              No career information found.
+              No skills information found.
             </h4>
           </div>
         )}
