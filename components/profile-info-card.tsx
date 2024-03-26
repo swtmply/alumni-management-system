@@ -52,6 +52,11 @@ export const updatePersonalInfoSchema = z.object({
     .min(1, { message: "Year of Graduation is required" }),
   image: z.string().optional(),
   employed: z.boolean(),
+
+  jobTitle: z.string().optional(),
+  company: z.string().optional(),
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
 });
 
 interface ProfileFormProps {
@@ -64,17 +69,20 @@ interface ProfileFormProps {
     yearOfGraduate: string;
     dateOfBirth: Date;
     employed: boolean;
+
+    jobTitle?: string;
+    company?: string;
+    startDate?: Date;
+    endDate?: Date;
   };
   editable?: boolean;
   image?: string;
-  currentCareer: Career | null;
 }
 
 const ProfileInfoCard = ({
   defaultValues,
   editable = true,
   image,
-  currentCareer,
 }: ProfileFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
@@ -192,9 +200,17 @@ const ProfileInfoCard = ({
                   {disabled ? (
                     <p className="text-sm text-muted-foreground">
                       {field.value
-                        ? currentCareer
-                          ? `Employed - ${currentCareer?.position} at ${currentCareer?.companyName}`
-                          : "Employed"
+                        ? `Employed ${
+                            form.watch().employed
+                              ? `${form.watch().jobTitle} at ${
+                                  form.watch().company
+                                }, ${Intl.DateTimeFormat("PPP").format(
+                                  form.watch().startDate
+                                )} - ${Intl.DateTimeFormat("PPP").format(
+                                  form.watch().endDate
+                                )}`
+                              : null
+                          }`
                         : "Not employed"}
                     </p>
                   ) : (
@@ -209,6 +225,74 @@ const ProfileInfoCard = ({
                 </FormItem>
               )}
             />
+            {editable && form.watch().employed && (
+              <FormField
+                control={form.control}
+                name="jobTitle"
+                render={({ field }) => (
+                  <FormItem className="flex items-center">
+                    <FormLabel className="w-1/2">Job title</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter job title"
+                        {...field}
+                        disabled={disabled}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {editable && form.watch().employed && (
+              <FormField
+                control={form.control}
+                name="company"
+                render={({ field }) => (
+                  <FormItem className="flex items-center">
+                    <FormLabel className="w-1/2">Company Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter Company Name"
+                        {...field}
+                        disabled={disabled}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {editable && form.watch().employed && (
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem className="flex items-center">
+                    <FormLabel className="w-1/2">Start Date</FormLabel>
+                    <FormControl>
+                      <DatePicker disabled={disabled} field={field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {editable && form.watch().employed && (
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem className="flex items-center">
+                    <FormLabel className="w-1/2">End Date</FormLabel>
+                    <FormControl>
+                      <DatePicker disabled={disabled} field={field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="firstName"
