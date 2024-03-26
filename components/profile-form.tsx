@@ -20,6 +20,7 @@ import { useToast } from "./ui/use-toast";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Switch } from "./ui/switch";
 
 export const createProfileSchema = z.object({
   studentNumber: z
@@ -48,6 +49,13 @@ export const createProfileSchema = z.object({
     state: z.string({ required_error: "State is required" }),
     zip: z.string({ required_error: "Zip is required" }),
   }),
+
+  employed: z.boolean(),
+
+  jobTitle: z.string().optional(),
+  company: z.string().optional(),
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
 });
 
 export default function ProfileForm() {
@@ -71,6 +79,11 @@ export default function ProfileForm() {
         state: "",
         zip: "",
       },
+      employed: false,
+      jobTitle: "",
+      company: "",
+      startDate: new Date(),
+      endDate: new Date(),
     },
   });
 
@@ -100,6 +113,78 @@ export default function ProfileForm() {
             <CardTitle>Personal Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
+            <FormField
+              control={form.control}
+              name="employed"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between">
+                  <FormLabel className="w-1/2">Employed</FormLabel>
+
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="jobTitle"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormLabel className="w-1/2">Job title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter job title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="company"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormLabel className="w-1/2">Company Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter Company Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormLabel className="w-1/2">Start Date</FormLabel>
+                  <FormControl>
+                    <DatePicker field={field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormLabel className="w-1/2">End Date</FormLabel>
+                  <FormControl>
+                    <DatePicker field={field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="firstName"

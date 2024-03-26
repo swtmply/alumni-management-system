@@ -17,13 +17,6 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
     },
   });
 
-  const currentCareer = await prisma.career.findFirst({
-    where: {
-      userId: params.userId,
-      present: true,
-    },
-  });
-
   if (!profile)
     return (
       <div className="w-full flex flex-col">
@@ -55,7 +48,6 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
             defaultValues={profile}
             image={user?.image || ""}
             editable={editable}
-            currentCareer={currentCareer}
           />
           <div className="flex flex-col gap-2">
             <AddressInfoCard
