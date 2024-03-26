@@ -46,17 +46,17 @@ export const addJobFormSchema = z.object({
     .min(1, { message: "Contact must have at least 1 detail" }),
 });
 
-const AddJobModal = () => {
+const AddJobModal = ({ label }: { label?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Add Job</Button>
+        <Button>{label || "Add Job"}</Button>
       </DialogTrigger>
       <DialogContent className="max-w-max">
         <DialogHeader>
-          <DialogTitle>Add Job</DialogTitle>
+          <DialogTitle>{label || "Add Job"}</DialogTitle>
         </DialogHeader>
         <AddJobForm setIsOpen={setIsOpen} />
       </DialogContent>

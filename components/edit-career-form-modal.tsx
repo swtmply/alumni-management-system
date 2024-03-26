@@ -25,10 +25,12 @@ import {
 import DatePicker from "./ui/date-picker";
 import { TagInput } from "./ui/tag-input";
 import { useToast } from "./ui/use-toast";
-import { createCareer } from "@/app/lib/career/actions";
+import { updateCareer } from "@/app/lib/career/actions";
 import { useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { Career } from "@prisma/client";
 
 export const careerFormSchema = z.object({
   companyName: z
@@ -48,24 +50,23 @@ export const careerFormSchema = z.object({
     .min(1, { message: "Description must have at least 1 character" }),
 });
 
-export default function AddCareerFormModal() {
+interface EditCareerFormModalProps {
+  defaultValues: Career;
+}
+
+export default function EditCareerFormModal({
+  defaultValues,
+}: EditCareerFormModalProps) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof careerFormSchema>>({
     resolver: zodResolver(careerFormSchema),
-    defaultValues: {
-      companyName: "",
-      endYear: new Date(),
-      position: "",
-      projectsDone: [],
-      startYear: new Date(),
-      description: "",
-    },
+    defaultValues,
   });
 
   const onSubmit = async (values: z.infer<typeof careerFormSchema>) => {
-    const response = await createCareer(values);
+    const response = await updateCareer(defaultValues.id, values);
 
     toast({
       title: response?.message,
@@ -77,7 +78,9 @@ export default function AddCareerFormModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Career</Button>
+        <Button variant={"ghost"} size={"icon"}>
+          <DotsVerticalIcon />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

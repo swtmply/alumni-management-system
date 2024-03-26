@@ -1,11 +1,28 @@
 import { GraduationCap } from "lucide-react";
 import { auth } from "../lib/auth";
 import Navigation, { NavigationSkeleton } from "@/components/navigation";
-import Header, { HeaderSkeleton } from "@/components/header";
+import Header from "@/components/header";
 import { Suspense } from "react";
+import prisma from "../lib/db";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
+
+  const availableCourses = await prisma.job.findMany({
+    select: {
+      courses: true,
+    },
+  });
+
+  const courses = availableCourses.reduce((acc, job) => {
+    job.courses.forEach((course) => {
+      if (!acc.includes(course)) {
+        acc.push(course);
+      }
+    });
+
+    return acc;
+  }, [] as string[]);
 
   return (
     <div className="flex relative">
@@ -21,14 +38,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
         </Suspense>
       </div>
       <main className="flex flex-col px-4 py-12 w-full">
-        <Suspense fallback={<HeaderSkeleton />}>
-          <Header
-            session={{
-              name: session?.user?.name,
-              role: session?.user?.role,
-            }}
-          />
-        </Suspense>
+        <Header courses={courses} />
         {children}
       </main>
     </div>

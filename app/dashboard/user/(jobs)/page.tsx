@@ -13,10 +13,41 @@ import { Badge } from "@/components/ui/badge";
 import ViewJobModal from "@/components/job-info-modal";
 import { auth } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
+import AddJobModal from "@/components/table/jobs/add-job-modal";
 
-async function UserHomePage() {
+async function UserHomePage({
+  searchParams,
+}: {
+  searchParams: { search: string; course: string };
+}) {
+  const search = searchParams.search;
+  const course = searchParams.course;
+
   const jobs = await prisma.job.findMany({
     orderBy: { updatedAt: "desc" },
+    where: {
+      OR: [
+        {
+          description: search
+            ? { contains: search, mode: "insensitive" }
+            : course
+            ? undefined
+            : { contains: "" },
+        },
+        {
+          role: search
+            ? { contains: search, mode: "insensitive" }
+            : course
+            ? undefined
+            : { contains: "" },
+        },
+        { skills: search ? { hasSome: [search] } : undefined },
+        { courses: course ? { hasSome: [course] } : undefined },
+      ],
+      NOT: {
+        OR: [{ status: "rejected" }, { status: "pending" }],
+      },
+    },
   });
 
   const session = await auth();
@@ -31,9 +62,12 @@ async function UserHomePage() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <div className="max-w-6xl w-full flex flex-col gap-4">
-        <h2 className="text-2xl font-bold tracking-tight w-full">Jobs</h2>
-        <div className="grid grid-cols-3 gap-4">
+      <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex justify-between items-center">
+          <h2 className="text-2xl font-bold tracking-tight w-full">Jobs</h2>
+          <AddJobModal label="Recommend Job" />
+        </div>
+        <div className="grid grid-cols-4 gap-4">
           {jobs.map((job) => (
             <Card key={job.id}>
               <CardHeader>
@@ -72,6 +106,9 @@ async function UserHomePage() {
             </Card>
           ))}
         </div>
+        {jobs.length === 0 && (
+          <p className="text-center text-gray-500">No jobs posted</p>
+        )}
       </div>
     </div>
   );

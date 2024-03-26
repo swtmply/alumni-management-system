@@ -62,13 +62,13 @@ function ViewJobForm({ job }: { job: Job }) {
         {/* contact details */}
         <div>
           <p className="text-sm font-medium">Contact Details</p>
-          <p className="text-slate-600 flex gap-2 flex-wrap mt-2">
+          <div className="text-slate-600 flex gap-2 flex-wrap mt-2">
             {job.contactDetails.map((contact) => (
               <Badge key={contact} variant={"outline"}>
                 {contact}
               </Badge>
             ))}
-          </p>
+          </div>
         </div>
       </div>
 
@@ -96,25 +96,25 @@ function ViewJobForm({ job }: { job: Job }) {
         </div>
         {/* skills */}
         <div>
-          <p className="text-sm font-medium">Contact Details</p>
-          <p className="text-slate-600 flex gap-2 flex-wrap mt-2">
+          <p className="text-sm font-medium">Skill Required</p>
+          <div className="text-slate-600 flex gap-2 flex-wrap mt-2">
             {job.skills.map((skill) => (
               <Badge key={skill} variant={"outline"}>
                 {skill}
               </Badge>
             ))}
-          </p>
+          </div>
         </div>
         {/* Courses */}
         <div>
-          <p className="text-sm font-medium">Contact Details</p>
-          <p className="text-slate-600 flex gap-2 flex-wrap mt-2">
+          <p className="text-sm font-medium">Related Course</p>
+          <div className="text-slate-600 flex gap-2 flex-wrap mt-2">
             {job.courses.map((course) => (
               <Badge key={course} variant={"outline"}>
                 {course}
               </Badge>
             ))}
-          </p>
+          </div>
         </div>
       </div>
     </div>

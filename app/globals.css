@@ -89,3 +89,15 @@
 .fc-toolbar-title {
   @apply text-foreground !text-lg font-semibold;
 }
+
+.fc-daygrid-event {
+  @apply bg-transparent border-none font-sans;
+}
+
+.fc-daygrid-day-number {
+  @apply text-xl font-semibold;
+}
+
+.fc-daygrid-day-top {
+  @apply !flex-col;
+}

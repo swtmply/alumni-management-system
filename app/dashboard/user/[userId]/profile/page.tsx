@@ -1,5 +1,6 @@
 import { auth } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
+import AddressInfoCard from "@/components/address-info-card";
 import ContactInfoCard from "@/components/contact-info-card";
 import ProfileForm from "@/components/profile-form";
 import ProfileInfoCard from "@/components/profile-info-card";
@@ -11,12 +12,22 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
 
   const profile = await prisma.profile.findUnique({
     where: { userId: params.userId },
+    include: {
+      address: true,
+    },
+  });
+
+  const currentCareer = await prisma.career.findFirst({
+    where: {
+      userId: params.userId,
+      present: true,
+    },
   });
 
   if (!profile)
     return (
-      <div className="w-full flex flex-col justify-center items-center">
-        <div className="max-w-3xl w-full">
+      <div className="w-full flex flex-col">
+        <div className="w-full">
           <h2 className="text-2xl font-bold tracking-tight w-full">
             Complete your profile
           </h2>
@@ -32,26 +43,36 @@ const UserProfile = async ({ params }: { params: { userId: string } }) => {
   const editable = session?.user?.id === user?.id;
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
-      <div className="max-w-3xl w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col gap-4">
         <h2 className="text-2xl font-bold tracking-tight w-full">
           User Information
         </h2>
         <UserInformationTabs />
 
-        <ProfileInfoCard
-          defaultValues={profile}
-          image={user?.image || ""}
-          editable={editable}
-        />
-        <ContactInfoCard
-          defaultValues={{
-            id: profile.id,
-            phoneNumber: profile.phoneNumber,
-            email: user?.email || "",
-          }}
-          editable={editable}
-        />
+        <div className="grid grid-cols-2 gap-2">
+          <ProfileInfoCard
+            defaultValues={profile}
+            image={user?.image || ""}
+            editable={editable}
+            currentCareer={currentCareer}
+          />
+          <div className="flex flex-col gap-2">
+            <AddressInfoCard
+              defaultValues={profile.address}
+              editable={editable}
+              profileId={profile.id}
+            />
+            <ContactInfoCard
+              defaultValues={{
+                id: profile.id,
+                phoneNumber: profile.phoneNumber,
+                email: user?.email || "",
+              }}
+              editable={editable}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -29,6 +29,9 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { PutBlobResult } from "@vercel/blob";
+import { Loader2 } from "lucide-react";
+import { Address, Career } from "@prisma/client";
+import { Switch } from "./ui/switch";
 
 export const updatePersonalInfoSchema = z.object({
   studentNumber: z
@@ -48,6 +51,7 @@ export const updatePersonalInfoSchema = z.object({
     .string()
     .min(1, { message: "Year of Graduation is required" }),
   image: z.string().optional(),
+  employed: z.boolean(),
 });
 
 interface ProfileFormProps {
@@ -59,15 +63,18 @@ interface ProfileFormProps {
     course: string;
     yearOfGraduate: string;
     dateOfBirth: Date;
+    employed: boolean;
   };
   editable?: boolean;
   image?: string;
+  currentCareer: Career | null;
 }
 
 const ProfileInfoCard = ({
   defaultValues,
   editable = true,
   image,
+  currentCareer,
 }: ProfileFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
@@ -173,6 +180,32 @@ const ProfileInfoCard = ({
                     </div>
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="employed"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between">
+                  <FormLabel className="w-1/2">Employed</FormLabel>
+                  {disabled ? (
+                    <p className="text-sm text-muted-foreground">
+                      {field.value
+                        ? currentCareer
+                          ? `Employed - ${currentCareer?.position} at ${currentCareer?.companyName}`
+                          : "Employed"
+                        : "Not employed"}
+                    </p>
+                  ) : (
+                    <FormControl>
+                      <Switch
+                        disabled={disabled}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  )}
                 </FormItem>
               )}
             />
@@ -292,11 +325,15 @@ const ProfileInfoCard = ({
             </Button>
           )}
           <Button
+            disabled={form.formState.isSubmitting}
             onClick={() => setDisabled((prev) => !prev)}
             variant={!disabled ? "default" : "outline"}
             form="personal-info-form"
             type={!disabled ? "button" : "submit"}
           >
+            {form.formState.isSubmitting && (
+              <Loader2 className="animate-spin mr-2" />
+            )}
             {!disabled ? "Save Changes" : "Edit Personal Information"}
           </Button>
         </CardFooter>

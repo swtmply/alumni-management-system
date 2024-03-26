@@ -27,8 +27,8 @@ const UserSkills = async ({ params }: { params: { userId: string } }) => {
   const editable = session?.user?.id === user?.id;
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
-      <div className="max-w-3xl w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col">
+      <div className=" w-full flex flex-col gap-4">
         <h2 className="text-2xl font-bold tracking-tight w-full">
           User Skills Information
         </h2>
@@ -36,7 +36,15 @@ const UserSkills = async ({ params }: { params: { userId: string } }) => {
 
         {editable && <AddSkillFormModal />}
 
-        <div className="grid grid-cols-3 gap-2">
+        {skills.length === 0 && (
+          <div>
+            <h4 className="text-xl font-semibold">
+              No skills information found.
+            </h4>
+          </div>
+        )}
+
+        <div className="grid grid-cols-4 gap-2">
           {skills.map((skill) => (
             <Card key={skill.id}>
               <CardHeader>

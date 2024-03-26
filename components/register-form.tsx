@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "./ui/use-toast";
 import { register } from "@/app/lib/auth/actions";
+import { useRouter } from "next/navigation";
 
 export const registerFormSchema = z.object({
   email: z
@@ -35,6 +36,7 @@ export default function RegisterForm() {
       password: "",
     },
   });
+  const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
     const response = await register(values);
@@ -42,6 +44,8 @@ export default function RegisterForm() {
     toast({
       title: response?.message,
     });
+
+    router.push("/login");
   };
 
   return (

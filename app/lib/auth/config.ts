@@ -7,6 +7,7 @@ declare module "next-auth" {
     user?: {
       id: string;
       role: string;
+      verified: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -21,13 +22,20 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
       const isAdmin = auth?.user?.role === "admin";
+      const isVerified = auth?.user?.verified;
 
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
         if (!isAdmin) {
-          return Response.redirect(new URL("/dashboard/user", nextUrl));
+          if (isVerified) {
+            return Response.redirect(new URL("/dashboard/user", nextUrl));
+          } else {
+            return Response.redirect(
+              new URL(`/dashboard/user/${auth.user?.id}/profile`, nextUrl)
+            );
+          }
         }
 
         return Response.redirect(new URL("/dashboard", nextUrl));
@@ -42,6 +50,7 @@ export const authConfig = {
         session.user.id = token.sub;
         session.user.role = token.role;
         session.user.image = token.picture;
+        session.user.verified = token.verified;
       }
       return session;
     },
@@ -56,6 +65,8 @@ export const authConfig = {
       if (user) {
         // @ts-ignore
         token.role = user.role;
+        // @ts-ignore
+        token.verified = user.emailVerified !== null;
       }
       return token;
     },
