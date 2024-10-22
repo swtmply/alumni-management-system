@@ -6,10 +6,11 @@ import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/providers";
 import { auth } from "./lib/auth";
 
-export const fontSans = FontSans({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
 export const metadata: Metadata = {
   title: "Alumni Management System",
   description: "Alumni management system for X university.",
