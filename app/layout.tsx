@@ -10,6 +10,7 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
 export const metadata: Metadata = {
   title: "Alumni Management System",
   description: "Alumni management system for X university.",
